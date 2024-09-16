@@ -5,11 +5,11 @@
 constexpr int SCREENWIDTH = 1500;
 constexpr int SCREENHEIGHT = 900;
 constexpr int FRAMERATE = 60;
-constexpr int GRIDCELLSIZE = 6;
+constexpr int GRIDCELLSIZE = 60;
 constexpr int MENUWIDTH = 300;
 constexpr int GRIDWIDTH = (SCREENWIDTH - MENUWIDTH) / GRIDCELLSIZE;
 constexpr int GRIDHEIGHT = SCREENHEIGHT / GRIDCELLSIZE;
-constexpr Color BACKGROUNDCOLOR = { 4, 4, 8, 255 };
+constexpr Color BACKGROUNDCOLOR = { 2, 2, 4, 255 };
 constexpr Color MENUCOLOR = { 225, 225, 225, 255 };
 constexpr Color SELECTCOLOR = { 200, 230, 200, 255 };
 constexpr int FONTSIZE = 36;
@@ -17,6 +17,11 @@ constexpr int FONTSIZE = 36;
 typedef struct gridCell {
     Color cellColor;
     unsigned char density;
+
+    unsigned char moveUp;
+    unsigned char moveDown;
+    unsigned char moveLeft;
+    unsigned char moveRight;
 }gridCell;
 
 typedef struct paintInfo {
@@ -31,6 +36,7 @@ typedef struct menuInfo {
 }menuInfo;
 
 void initScreen();
+void drawArrows(gridCell readCell, int readRow, int readCol);
 void drawScene(gridCell readGrid[GRIDHEIGHT*GRIDWIDTH]);
 void drawMenu(paintInfo readPaint, menuInfo readInfo);
 void drawScreen(gridCell readGrid[GRIDHEIGHT*GRIDWIDTH], paintInfo readPaint, menuInfo readInfo);

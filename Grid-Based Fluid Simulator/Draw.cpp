@@ -5,10 +5,21 @@ void initScreen() {
     SetTargetFPS(FRAMERATE);
 }
 
+void drawArrows(gridCell readCell, int readRow, int readCol) {
+    unsigned short int tempFlow = abs(readCell.moveDown) + abs(readCell.moveUp) + abs(readCell.moveLeft) + abs(readCell.moveRight);
+    tempFlow *= 4;
+    if (tempFlow > 255) tempFlow = 255;
+    short int angle = 0;
+    DrawRectanglePro({ (float) GRIDCELLSIZE * readRow + GRIDCELLSIZE / 2, (float) GRIDCELLSIZE * readCol + GRIDCELLSIZE /2, GRIDCELLSIZE / 2, GRIDCELLSIZE / 4 }, { GRIDCELLSIZE / 4, GRIDCELLSIZE / 8 }, angle, { 255, 255, 255, (unsigned char)tempFlow });
+    DrawRectanglePro({ (float)GRIDCELLSIZE * readRow + GRIDCELLSIZE / 2, (float)GRIDCELLSIZE * readCol + GRIDCELLSIZE / 2, GRIDCELLSIZE / 8, GRIDCELLSIZE / 4 }, { -GRIDCELLSIZE / 4, GRIDCELLSIZE /8}, angle, { 40, 130, 255, (unsigned char)tempFlow });
+}
+
 void drawScene(gridCell readGrid[GRIDHEIGHT*GRIDWIDTH]) {
     for (int col = 0; col < GRIDHEIGHT; col++) 
-        for (int row = 0; row < GRIDWIDTH; row++) 
+        for (int row = 0; row < GRIDWIDTH; row++) {
             DrawRectangle(GRIDCELLSIZE * row, GRIDCELLSIZE * col, GRIDCELLSIZE, GRIDCELLSIZE, { readGrid[col * GRIDHEIGHT + row].cellColor.r, readGrid[col * GRIDHEIGHT + row].cellColor.g, readGrid[col * GRIDHEIGHT + row].cellColor.b, readGrid[col * GRIDHEIGHT + row].density });
+            drawArrows(readGrid[col * GRIDHEIGHT + row], row, col);
+            }
 }
 
 void drawMenu(paintInfo readPaint, menuInfo readInfo) {
@@ -56,6 +67,10 @@ void fillGrid(gridCell readGrid[GRIDHEIGHT*GRIDWIDTH]) {
         for (int row = 0; row < GRIDWIDTH; row++) {
             readGrid[col * GRIDHEIGHT + row].cellColor = BACKGROUNDCOLOR;
             readGrid[col * GRIDHEIGHT + row].density = 255;
+            readGrid[col * GRIDHEIGHT + row].moveUp = 0;
+            readGrid[col * GRIDHEIGHT + row].moveDown = 0;
+            readGrid[col * GRIDHEIGHT + row].moveLeft = 55;
+            readGrid[col * GRIDHEIGHT + row].moveRight = 0;
         }
 }
 
