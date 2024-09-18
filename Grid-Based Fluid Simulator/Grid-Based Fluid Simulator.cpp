@@ -2,6 +2,7 @@
 
 int main(void)
 {
+    srand(time(0));
     gridCell* Grid = new gridCell[GRIDHEIGHT*GRIDWIDTH];
     paintInfo Paint;
     menuInfo Info;
@@ -17,7 +18,7 @@ int main(void)
             if (x > SCREENWIDTH - MENUWIDTH)
                 clickMenu(Paint, x, y, Info);
             else 
-                clickScene(Paint, x, y, Info);
+                clickScene(Grid, Paint, x, y, Info);
         }
         if (Info.textField != 0)
             checkKeyboard(Paint, Info);
@@ -31,3 +32,5 @@ int main(void)
     CloseWindow();        
     return 0;
 }
+
+//make it so obstacles don't show angle arrows

@@ -1,24 +1,21 @@
 #include "Draw.h"
-#include <iostream>
+
 void initScreen() {
     InitWindow(SCREENWIDTH, SCREENHEIGHT, "Fluid Simulator");
     SetTargetFPS(FRAMERATE);
 }
 
-void drawArrows(gridCell readCell, int readRow, int readCol) {
-    unsigned short int tempFlow = abs(readCell.moveDown) + abs(readCell.moveUp) + abs(readCell.moveLeft) + abs(readCell.moveRight);
-    tempFlow *= 4;
-    if (tempFlow > 255) tempFlow = 255;
-    short int angle = 0;
-    DrawRectanglePro({ (float) GRIDCELLSIZE * readRow + GRIDCELLSIZE / 2, (float) GRIDCELLSIZE * readCol + GRIDCELLSIZE /2, GRIDCELLSIZE / 2, GRIDCELLSIZE / 4 }, { GRIDCELLSIZE / 4, GRIDCELLSIZE / 8 }, angle, { 255, 255, 255, (unsigned char)tempFlow });
-    DrawRectanglePro({ (float)GRIDCELLSIZE * readRow + GRIDCELLSIZE / 2, (float)GRIDCELLSIZE * readCol + GRIDCELLSIZE / 2, GRIDCELLSIZE / 8, GRIDCELLSIZE / 4 }, { -GRIDCELLSIZE / 4, GRIDCELLSIZE /8}, angle, { 40, 130, 255, (unsigned char)tempFlow });
+void drawVelocity(gridCell readCell, int readRow, int readCol) {
+    DrawRectanglePro({ (float) GRIDCELLSIZE * readCol + GRIDCELLSIZE / 2, (float) GRIDCELLSIZE * readRow + GRIDCELLSIZE /2, GRIDCELLSIZE * 3 / 4, GRIDCELLSIZE / 2 }, { GRIDCELLSIZE * 3/ 8, GRIDCELLSIZE / 4 }, readCell.angle, { 255, 255, 255, readCell.density });
+    DrawRectanglePro({ (float)GRIDCELLSIZE * readCol + GRIDCELLSIZE / 2, (float)GRIDCELLSIZE * readRow + GRIDCELLSIZE / 2, GRIDCELLSIZE * 3 / 8, GRIDCELLSIZE / 2 }, { GRIDCELLSIZE * 3 / 8, GRIDCELLSIZE /4}, readCell.angle, { 40, 130, 255, readCell.density});
 }
 
-void drawScene(gridCell readGrid[GRIDHEIGHT*GRIDWIDTH]) {
-    for (int col = 0; col < GRIDHEIGHT; col++) 
-        for (int row = 0; row < GRIDWIDTH; row++) {
-            DrawRectangle(GRIDCELLSIZE * row, GRIDCELLSIZE * col, GRIDCELLSIZE, GRIDCELLSIZE, { readGrid[col * GRIDHEIGHT + row].cellColor.r, readGrid[col * GRIDHEIGHT + row].cellColor.g, readGrid[col * GRIDHEIGHT + row].cellColor.b, readGrid[col * GRIDHEIGHT + row].density });
-            drawArrows(readGrid[col * GRIDHEIGHT + row], row, col);
+void drawScene(gridCell readGrid[GRIDHEIGHT*GRIDWIDTH], menuInfo readInfo) {
+    DrawRectangle(0, 0, SCREENWIDTH - MENUWIDTH, SCREENHEIGHT, BACKGROUNDCOLOR);
+    for (unsigned short int row = 0; row < GRIDHEIGHT; row++)
+        for (unsigned short int col = 0; col < GRIDWIDTH; col++) {
+            DrawRectangle(GRIDCELLSIZE * col, GRIDCELLSIZE * row, GRIDCELLSIZE, GRIDCELLSIZE, { readGrid[row * GRIDWIDTH + col].cellColor.r, readGrid[row * GRIDWIDTH + col].cellColor.g, readGrid[row * GRIDWIDTH + col].cellColor.b, readGrid[row * GRIDWIDTH + col].density });
+            if (readInfo.displayAngles) drawVelocity(readGrid[row * GRIDWIDTH + col], row, col);
             }
 }
 
@@ -49,28 +46,29 @@ void drawMenu(paintInfo readPaint, menuInfo readInfo) {
         DrawText("B", SCREENWIDTH - MENUWIDTH * 3 / 16 - MeasureText("B", FONTSIZE) / 2, 295, FONTSIZE, BLACK);
     }
     DrawText("Reset scene", SCREENWIDTH - MENUWIDTH / 2 - MeasureText("Reset scene", FONTSIZE) / 2, 340, FONTSIZE, RED);
-    DrawText("Brush size:", SCREENWIDTH - MENUWIDTH * 5 / 8 - MeasureText("Brush size:", FONTSIZE) / 2, 385, FONTSIZE, BLACK);
-    DrawRectangle(SCREENWIDTH - MENUWIDTH * 1/4, 385, MENUWIDTH / 6, MENUWIDTH / 8, readInfo.textField == 4 ? SELECTCOLOR : WHITE);
-    DrawText(TextFormat("%i", readPaint.brushSize), SCREENWIDTH - MENUWIDTH * 11 / 64 - MeasureText(TextFormat("%i", readPaint.brushSize), FONTSIZE) / 2, 386, FONTSIZE, BLACK);
+    DrawText("Brush size:", SCREENWIDTH - MENUWIDTH * 19 / 20, 385, FONTSIZE * 3 / 4, BLACK);
+    DrawRectangle(SCREENWIDTH - MENUWIDTH / 4, 384, MENUWIDTH / 8, MENUWIDTH / 10, readInfo.textField == 4 ? SELECTCOLOR : WHITE);
+    DrawText(TextFormat("%i", readPaint.brushSize), SCREENWIDTH - MENUWIDTH * 3 / 16 - MeasureText(TextFormat("%i", readPaint.brushSize), FONTSIZE*3/4) / 2, 386, FONTSIZE*3/4, BLACK);
+    DrawText("Toggle angles:", SCREENWIDTH - MENUWIDTH * 19/20, 426, FONTSIZE*3/4, BLACK);
+    DrawRectangle(SCREENWIDTH - MENUWIDTH / 4, 424, MENUWIDTH / 8, MENUWIDTH / 10, readInfo.displayAngles ? GREEN : RED);
 }
 
 void drawScreen(gridCell readGrid[GRIDHEIGHT*GRIDWIDTH], paintInfo readPaint, menuInfo readInfo) {
     BeginDrawing();
     ClearBackground(MENUCOLOR);
-    drawScene(readGrid);
+    drawScene(readGrid, readInfo);
     drawMenu(readPaint, readInfo);
     EndDrawing();
 }
 
 void fillGrid(gridCell readGrid[GRIDHEIGHT*GRIDWIDTH]) {
-    for (int col = 0; col < GRIDHEIGHT; col++) 
-        for (int row = 0; row < GRIDWIDTH; row++) {
-            readGrid[col * GRIDHEIGHT + row].cellColor = BACKGROUNDCOLOR;
-            readGrid[col * GRIDHEIGHT + row].density = 255;
-            readGrid[col * GRIDHEIGHT + row].moveUp = 0;
-            readGrid[col * GRIDHEIGHT + row].moveDown = 0;
-            readGrid[col * GRIDHEIGHT + row].moveLeft = 55;
-            readGrid[col * GRIDHEIGHT + row].moveRight = 0;
+    for (int row = 0; row < GRIDHEIGHT; row++)
+        for (int col = 0; col < GRIDWIDTH; col++) {
+            readGrid[row * GRIDWIDTH + col].cellColor = BACKGROUNDCOLOR;
+            readGrid[row * GRIDWIDTH + col].density = 0;
+            readGrid[row * GRIDWIDTH + col].moveHor = 0;
+            readGrid[row * GRIDWIDTH + col].moveVert = 0;
+            readGrid[row * GRIDWIDTH + col].angle = rand() % 360;
         }
 }
 
@@ -79,12 +77,13 @@ void fillPaint(paintInfo& readPaint) {
     for (int i = 1; i < 9; i++) 
         readPaint.colorArray[i] = WHITE;
     readPaint.selectedColor = 1;
-    readPaint.brushSize = 8;
+    readPaint.brushSize = 1;
 }
 
 void fillMenu(menuInfo& readInfo){
     readInfo.textField = 0;
     readInfo.resetGrid = false;
+    readInfo.displayAngles = false;
 }
 
 void clickMenu(paintInfo& readPaint, int x, int y, menuInfo& readInfo) {
@@ -121,12 +120,20 @@ void clickMenu(paintInfo& readPaint, int x, int y, menuInfo& readInfo) {
     }
     else if (y > 350 && y < 378)
         readInfo.resetGrid = true;
-    else if (y < 422 && y > 386)
+    else if (y < 418 && y > 384 && x > SCREENWIDTH - (MENUWIDTH / 4) && x < SCREENWIDTH - (MENUWIDTH * 1 / 8))
         readInfo.textField = 4;
+    else if (y < 458 && y > 424 && x > SCREENWIDTH - (MENUWIDTH / 4) && x < SCREENWIDTH - (MENUWIDTH * 1 / 8))
+        readInfo.displayAngles = !readInfo.displayAngles;
 }
 
-void clickScene(paintInfo& readPaint, int x, int y, menuInfo& readInfo) {
+void clickScene(gridCell readGrid[GRIDHEIGHT * GRIDWIDTH], paintInfo readPaint, int x, int y, menuInfo& readInfo) {
     readInfo.textField = 0;
+    paintScene(readGrid, readPaint, x, y);
+}
+
+void paintScene(gridCell readGrid[GRIDHEIGHT * GRIDWIDTH], paintInfo readPaint, int x, int y) {
+    readGrid[(y / GRIDCELLSIZE)* GRIDWIDTH+ x / GRIDCELLSIZE].cellColor = readPaint.colorArray[readPaint.selectedColor];
+    readGrid[(y / GRIDCELLSIZE) * GRIDWIDTH + x / GRIDCELLSIZE].density = 255;
 }
 
 void checkKeyboard(paintInfo& readPaint, menuInfo readInfo) {
@@ -141,7 +148,7 @@ void checkKeyboard(paintInfo& readPaint, menuInfo readInfo) {
         handleNumbers(0, 255, readPaint.colorArray[readPaint.selectedColor].b);
         break;
     case 4:
-        handleNumbers(0, 99, readPaint.brushSize);
+        handleNumbers(0, 19, readPaint.brushSize);
         break;
     }
 }
