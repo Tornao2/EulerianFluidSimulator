@@ -15,7 +15,7 @@ void drawScene(gridCell readGrid[GRIDHEIGHT*GRIDWIDTH], menuInfo readInfo) {
     for (unsigned short int row = 0; row < GRIDHEIGHT; row++)
         for (unsigned short int col = 0; col < GRIDWIDTH; col++) {
             DrawRectangle(GRIDCELLSIZE * col, GRIDCELLSIZE * row, GRIDCELLSIZE, GRIDCELLSIZE, { readGrid[row * GRIDWIDTH + col].cellColor.r, readGrid[row * GRIDWIDTH + col].cellColor.g, readGrid[row * GRIDWIDTH + col].cellColor.b, readGrid[row * GRIDWIDTH + col].density });
-            if (readInfo.displayAngles) drawVelocity(readGrid[row * GRIDWIDTH + col], row, col);
+            if (readInfo.displayAngles && !(readGrid[row * GRIDWIDTH + col].cellColor == BLACK)) drawVelocity(readGrid[row * GRIDWIDTH + col], row, col);
             }
 }
 
@@ -128,12 +128,20 @@ void clickMenu(paintInfo& readPaint, int x, int y, menuInfo& readInfo) {
 
 void clickScene(gridCell readGrid[GRIDHEIGHT * GRIDWIDTH], paintInfo readPaint, int x, int y, menuInfo& readInfo) {
     readInfo.textField = 0;
-    paintScene(readGrid, readPaint, x, y);
+    if(readPaint.brushSize != 0) paintScene(readGrid, readPaint, x, y);
 }
 
 void paintScene(gridCell readGrid[GRIDHEIGHT * GRIDWIDTH], paintInfo readPaint, int x, int y) {
-    readGrid[(y / GRIDCELLSIZE)* GRIDWIDTH+ x / GRIDCELLSIZE].cellColor = readPaint.colorArray[readPaint.selectedColor];
-    readGrid[(y / GRIDCELLSIZE) * GRIDWIDTH + x / GRIDCELLSIZE].density = 255;
+    unsigned char alphaDelta = 255 / ((readPaint.brushSize + 1) / 2 + 1);
+    for(int i = -readPaint.brushSize/2; i <= (readPaint.brushSize-1)/2; i++){
+        for (int j = -(readPaint.brushSize / 2 - abs(i)); j <= ((readPaint.brushSize - 1) / 2 - abs(i)); j++) {
+            if (y / GRIDCELLSIZE + i >= 0 && y / GRIDCELLSIZE + i < GRIDHEIGHT && x / GRIDCELLSIZE + j >= 0 && x / GRIDCELLSIZE + j < GRIDWIDTH)
+            {
+                readGrid[((y / GRIDCELLSIZE) + i) * GRIDWIDTH + x / GRIDCELLSIZE + j].cellColor = readPaint.colorArray[readPaint.selectedColor];
+                readGrid[((y / GRIDCELLSIZE) + i) * GRIDWIDTH + x / GRIDCELLSIZE + j].density = 255 - (abs(i) + abs(j)) * alphaDelta;
+            }
+        }
+    }
 }
 
 void checkKeyboard(paintInfo& readPaint, menuInfo readInfo) {
