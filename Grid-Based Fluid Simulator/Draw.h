@@ -19,15 +19,25 @@ constexpr int FONTSIZE = 36;
 typedef struct gridCell {
     Color cellColor;
     unsigned char density;
-    unsigned char moveVert;
-    unsigned char moveHor;
-    unsigned char angle;
+    unsigned char moveUp;
+    unsigned char moveDown;
+    unsigned char moveLeft;
+    unsigned char moveRight;
+    short int angle;
 }gridCell;
+
+typedef enum brushType {
+    color,
+    velocity,
+    gens,
+    colorAndVelocity
+}brushType;
 
 typedef struct paintInfo {
     Color colorArray[9];
     int selectedColor;
     unsigned char brushSize;
+    brushType type;
 }paintInfo;
 
 typedef struct menuInfo {
@@ -49,5 +59,4 @@ void clickScene(gridCell readGrid[GRIDHEIGHT * GRIDWIDTH], paintInfo readPaint, 
 void paintScene(gridCell readGrid[GRIDHEIGHT * GRIDWIDTH], paintInfo readPaint, int x, int y);
 void checkKeyboard(paintInfo& readPaint, menuInfo readInfo);
 void handleNumbers(int min, int max, unsigned char& number);
-
 bool operator==(Color x, Color y);
