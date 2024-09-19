@@ -49,3 +49,5 @@ void clickScene(gridCell readGrid[GRIDHEIGHT * GRIDWIDTH], paintInfo readPaint, 
 void paintScene(gridCell readGrid[GRIDHEIGHT * GRIDWIDTH], paintInfo readPaint, int x, int y);
 void checkKeyboard(paintInfo& readPaint, menuInfo readInfo);
 void handleNumbers(int min, int max, unsigned char& number);
+
+bool operator==(Color x, Color y);
