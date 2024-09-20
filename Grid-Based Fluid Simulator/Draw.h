@@ -28,9 +28,9 @@ typedef struct gridCell {
 
 typedef enum brushType {
     color,
-    velocity,
+    angle,
     gens,
-    colorAndVelocity
+    colorAndAngle
 }brushType;
 
 typedef struct paintInfo {
@@ -38,6 +38,7 @@ typedef struct paintInfo {
     int selectedColor;
     unsigned char brushSize;
     brushType type;
+    unsigned char specialType;
 }paintInfo;
 
 typedef struct menuInfo {
@@ -55,8 +56,8 @@ void fillGrid(gridCell readGrid[GRIDHEIGHT*GRIDWIDTH]);
 void fillPaint(paintInfo& readPaint);
 void fillMenu(menuInfo& readInfo);
 void clickMenu(paintInfo& readPaint, int x, int y, menuInfo& readInfo);
-void clickScene(gridCell readGrid[GRIDHEIGHT * GRIDWIDTH], paintInfo readPaint, int x, int y, menuInfo& readInfo);
-void paintScene(gridCell readGrid[GRIDHEIGHT * GRIDWIDTH], paintInfo readPaint, int x, int y);
+void clickScene(gridCell readGrid[GRIDHEIGHT * GRIDWIDTH], paintInfo readPaint, int x, int y, int prevX, int prevY, menuInfo& readInfo);
+void paintScene(gridCell readGrid[GRIDHEIGHT * GRIDWIDTH], paintInfo readPaint, int x, int y, int prevX, int prevY);
 void checkKeyboard(paintInfo& readPaint, menuInfo readInfo);
 void handleNumbers(int min, int max, unsigned char& number);
 bool operator==(Color x, Color y);

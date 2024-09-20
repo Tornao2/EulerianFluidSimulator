@@ -12,14 +12,14 @@ int main(void)
     initScreen();
     while (!WindowShouldClose())
     {
-        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-            int x = GetMouseX();
-            int y = GetMouseY();
-            if (x > SCREENWIDTH - MENUWIDTH)
-                clickMenu(Paint, x, y, Info);
-            else 
-                clickScene(Grid, Paint, x, y, Info);
-        }
+        int x = GetMouseX();
+        int y = GetMouseY();
+        int prevX;
+        int prevY;
+        if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && x < SCREENWIDTH - MENUWIDTH) 
+            clickScene(Grid, Paint, x, y, prevX, prevY, Info);
+        if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && x > SCREENWIDTH - MENUWIDTH)
+            clickMenu(Paint, x, y, Info);
         if (Info.textField != 0)
             checkKeyboard(Paint, Info);
         if (Info.resetGrid) {
@@ -27,6 +27,8 @@ int main(void)
             Info.resetGrid = false;
         }
         drawScreen(Grid, Paint, Info);
+        prevX = x;
+        prevY = y;
     }
     delete[] Grid;
     CloseWindow();        
