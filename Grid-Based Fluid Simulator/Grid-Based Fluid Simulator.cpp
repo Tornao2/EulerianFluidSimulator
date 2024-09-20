@@ -27,8 +27,6 @@ int main(void)
             Info.resetGrid = false;
         }
         drawScreen(Grid, Paint, Info);
-        prevX = x;
-        prevY = y;
     }
     delete[] Grid;
     CloseWindow();        

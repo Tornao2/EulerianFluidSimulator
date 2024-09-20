@@ -6,15 +6,15 @@ void initScreen() {
 }
 
 void drawVelocity(gridCell readCell, int readRow, int readCol) {
-    DrawRectanglePro({ (float)GRIDCELLSIZE * readCol + GRIDCELLSIZE / 2, (float)GRIDCELLSIZE * readRow + GRIDCELLSIZE / 2, GRIDCELLSIZE * 3 / 4, GRIDCELLSIZE / 2 }, { GRIDCELLSIZE * 3 / 8, GRIDCELLSIZE / 4 }, readCell.angle, { 255, 255, 255, (unsigned char)(readCell.density * 5) });
-    DrawRectanglePro({ (float)GRIDCELLSIZE * readCol + GRIDCELLSIZE / 2, (float)GRIDCELLSIZE * readRow + GRIDCELLSIZE / 2, GRIDCELLSIZE * 3 / 8, GRIDCELLSIZE / 2 }, { GRIDCELLSIZE * 3 / 8, GRIDCELLSIZE / 4 }, readCell.angle, { 40, 130, 255, (unsigned char)(readCell.density * 5) });
+    DrawRectanglePro({ (float)GRIDCELLSIZE * readCol + GRIDCELLSIZE / 2, (float)GRIDCELLSIZE * readRow + GRIDCELLSIZE / 2, GRIDCELLSIZE * 3 / 4, GRIDCELLSIZE / 2 }, { GRIDCELLSIZE * 3 / 8, GRIDCELLSIZE / 4 }, readCell.angle, { 255, 255, 255, (unsigned char)(readCell.density * 6)});
+    DrawRectanglePro({ (float)GRIDCELLSIZE * readCol + GRIDCELLSIZE / 2, (float)GRIDCELLSIZE * readRow + GRIDCELLSIZE / 2, GRIDCELLSIZE * 3 / 8, GRIDCELLSIZE / 2 }, { GRIDCELLSIZE * 3 / 8, GRIDCELLSIZE / 4 }, readCell.angle, { 40, 130, 255, (unsigned char)(readCell.density * 6 )});
 }
 
 void drawScene(gridCell readGrid[GRIDHEIGHT*GRIDWIDTH], menuInfo readInfo) {
     DrawRectangle(0, 0, SCREENWIDTH - MENUWIDTH, SCREENHEIGHT, BACKGROUNDCOLOR);
     for (unsigned short int row = 0; row < GRIDHEIGHT; row++)
         for (unsigned short int col = 0; col < GRIDWIDTH; col++) {
-            DrawRectangle(GRIDCELLSIZE * col, GRIDCELLSIZE * row, GRIDCELLSIZE, GRIDCELLSIZE, { readGrid[row * GRIDWIDTH + col].cellColor.r, readGrid[row * GRIDWIDTH + col].cellColor.g, readGrid[row * GRIDWIDTH + col].cellColor.b, (unsigned char)(readGrid[row * GRIDWIDTH + col].density * 5) });
+            DrawRectangle(GRIDCELLSIZE * col, GRIDCELLSIZE * row, GRIDCELLSIZE, GRIDCELLSIZE, { readGrid[row * GRIDWIDTH + col].cellColor.r, readGrid[row * GRIDWIDTH + col].cellColor.g, readGrid[row * GRIDWIDTH + col].cellColor.b, (unsigned char)(readGrid[row * GRIDWIDTH + col].density * 6) });
             if (readInfo.displayAngles && !(readGrid[row * GRIDWIDTH + col].cellColor == BLACK) && readGrid[row * GRIDWIDTH + col].angle != 360) drawVelocity(readGrid[row * GRIDWIDTH + col], row, col);
             }
 }
@@ -167,7 +167,7 @@ void clickScene(gridCell readGrid[GRIDHEIGHT * GRIDWIDTH], paintInfo readPaint, 
 }
 
 void paintScene(gridCell readGrid[GRIDHEIGHT * GRIDWIDTH], paintInfo readPaint, int x, int y, int prevX, int prevY) {
-    unsigned char alphaDelta = 50 / ((readPaint.brushSize + 1) / 2 + 1);
+    unsigned char alphaDelta = 25 / ((readPaint.brushSize + 1) / 2 + 1);
     for(int i = -readPaint.brushSize/2; i <= (readPaint.brushSize-1)/2; i++){
         for (int j = -(readPaint.brushSize / 2 - abs(i)); j <= ((readPaint.brushSize - 1) / 2 - abs(i)); j++) {
             if (y / GRIDCELLSIZE + i >= 0 && y / GRIDCELLSIZE + i < GRIDHEIGHT && x / GRIDCELLSIZE + j >= 0 && x / GRIDCELLSIZE + j < GRIDWIDTH)
@@ -175,11 +175,12 @@ void paintScene(gridCell readGrid[GRIDHEIGHT * GRIDWIDTH], paintInfo readPaint, 
                 if (readPaint.type == color || readPaint.type == colorAndAngle)
                 {
                     readGrid[((y / GRIDCELLSIZE) + i) * GRIDWIDTH + x / GRIDCELLSIZE + j].cellColor = readPaint.colorArray[readPaint.selectedColor];
-                    readGrid[((y / GRIDCELLSIZE) + i) * GRIDWIDTH + x / GRIDCELLSIZE + j].density = 50 - (abs(i) + abs(j)) * alphaDelta;
+                    readGrid[((y / GRIDCELLSIZE) + i) * GRIDWIDTH + x / GRIDCELLSIZE + j].density = 25 - (abs(i) + abs(j)) * alphaDelta;
                 }
                 if ((readPaint.type == angle || readPaint.type == colorAndAngle) && x - prevX != 0)
                 {
-                    readGrid[((y / GRIDCELLSIZE) + i) * GRIDWIDTH + x / GRIDCELLSIZE + j].angle = atan((y - prevY) / (x - prevX));
+                    std::cout << sin((y - prevY) / (x - prevX));
+                    readGrid[((y / GRIDCELLSIZE) + i) * GRIDWIDTH + x / GRIDCELLSIZE + j].angle = (asin(sin((y - prevY) / (x - prevX))) + 1)*180;
                 }
             }
         }
