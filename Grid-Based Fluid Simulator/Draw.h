@@ -23,7 +23,7 @@ typedef struct gridCell {
     unsigned char moveDown;
     unsigned char moveLeft;
     unsigned char moveRight;
-    short int angle;
+    float angle;
 }gridCell;
 
 typedef enum brushType {
@@ -34,7 +34,6 @@ typedef enum brushType {
 }brushType;
 
 typedef struct curGrid {
-    int cellX, cellY;
     int initX, initY;
     unsigned char status;
 }curGrid;
@@ -63,8 +62,8 @@ void fillPaint(paintInfo& readPaint);
 void fillMenu(menuInfo& readInfo);
 void fillDrawGrid(curGrid readDrawGrid[GRIDHEIGHT * GRIDWIDTH]);
 void clickMenu(paintInfo& readPaint, int x, int y, menuInfo& readInfo);
-void clickScene(gridCell readGrid[GRIDHEIGHT * GRIDWIDTH], paintInfo readPaint, int x, int y, menuInfo& readInfo, curGrid readDrawGrid[GRIDHEIGHT * GRIDWIDTH]);
-void paintScene(gridCell readGrid[GRIDHEIGHT * GRIDWIDTH], paintInfo readPaint, int x, int y, curGrid readDrawGrid[GRIDHEIGHT * GRIDWIDTH]);
+void clickScene(gridCell readGrid[GRIDHEIGHT * GRIDWIDTH], paintInfo readPaint, int x, int y, int& prevX, int& prevY, menuInfo& readInfo, curGrid readDrawGrid[GRIDHEIGHT * GRIDWIDTH]);
+void paintScene(gridCell readGrid[GRIDHEIGHT * GRIDWIDTH], paintInfo readPaint, int x, int y, int& prevX, int& prevY, curGrid readDrawGrid[GRIDHEIGHT * GRIDWIDTH]);
 void checkKeyboard(paintInfo& readPaint, menuInfo readInfo);
 void handleNumbers(int min, int max, unsigned char& number);
 bool operator==(Color x, Color y);

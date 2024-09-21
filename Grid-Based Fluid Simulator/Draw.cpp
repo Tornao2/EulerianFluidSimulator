@@ -103,8 +103,10 @@ void fillMenu(menuInfo& readInfo){
 
 void fillDrawGrid(curGrid readDrawGrid[GRIDHEIGHT * GRIDWIDTH]) {
     for (int row = 0; row < GRIDHEIGHT; row++)
-        for (int col = 0; col < GRIDWIDTH; col++) 
-            readDrawGrid[row * GRIDWIDTH + col].cellX = readDrawGrid[row * GRIDWIDTH + col].initX = readDrawGrid[row * GRIDWIDTH + col].cellY = readDrawGrid[row * GRIDWIDTH + col].initY = readDrawGrid[row * GRIDWIDTH + col].status = 0; 
+        for (int col = 0; col < GRIDWIDTH; col++) {
+            readDrawGrid[row * GRIDWIDTH + col].initX = readDrawGrid[row * GRIDWIDTH + col].initY = -1;
+            readDrawGrid[row * GRIDWIDTH + col].status = 0;
+        }
 }
 
 void clickMenu(paintInfo& readPaint, int x, int y, menuInfo& readInfo) {
@@ -167,33 +169,42 @@ void clickMenu(paintInfo& readPaint, int x, int y, menuInfo& readInfo) {
     }
 }
 
-void clickScene(gridCell readGrid[GRIDHEIGHT * GRIDWIDTH], paintInfo readPaint, int x, int y, menuInfo& readInfo, curGrid readDrawGrid[GRIDHEIGHT * GRIDWIDTH]) {
+void clickScene(gridCell readGrid[GRIDHEIGHT * GRIDWIDTH], paintInfo readPaint, int x, int y, int& prevX, int& prevY, menuInfo& readInfo, curGrid readDrawGrid[GRIDHEIGHT * GRIDWIDTH]) {
     readInfo.textField = 0;
-    if(readPaint.brushSize != 0) paintScene(readGrid, readPaint, x, y, readDrawGrid);
+    if(readPaint.brushSize != 0) paintScene(readGrid, readPaint, x, y, prevX, prevY, readDrawGrid);
 }
 
-void paintScene(gridCell readGrid[GRIDHEIGHT * GRIDWIDTH], paintInfo readPaint, int x, int y, curGrid readDrawGrid[GRIDHEIGHT * GRIDWIDTH]) {
+void paintScene(gridCell readGrid[GRIDHEIGHT * GRIDWIDTH], paintInfo readPaint, int x, int y, int& prevX, int& prevY, curGrid readDrawGrid[GRIDHEIGHT * GRIDWIDTH]) {
     unsigned char alphaDelta = 25 / ((readPaint.brushSize + 1) / 2 + 1);
     if (readDrawGrid[y / GRIDCELLSIZE * GRIDWIDTH + x/ GRIDCELLSIZE].status == 0) {
+        if (prevX != -1)
+            readDrawGrid[prevY * GRIDWIDTH + prevX].status = 3;
+        readDrawGrid[y / GRIDCELLSIZE * GRIDWIDTH + x / GRIDCELLSIZE].status = 1;
         readDrawGrid[y / GRIDCELLSIZE * GRIDWIDTH + x / GRIDCELLSIZE].initX = x;
-
+        readDrawGrid[y / GRIDCELLSIZE * GRIDWIDTH + x / GRIDCELLSIZE].initX = y;
     }
-    for(int i = -readPaint.brushSize/2; i <= (readPaint.brushSize-1)/2; i++){
-        for (int j = -(readPaint.brushSize / 2 - abs(i)); j <= ((readPaint.brushSize - 1) / 2 - abs(i)); j++) {
-            if (y / GRIDCELLSIZE + i >= 0 && y / GRIDCELLSIZE + i < GRIDHEIGHT && x / GRIDCELLSIZE + j >= 0 && x / GRIDCELLSIZE + j < GRIDWIDTH)
-            {
-                if (readPaint.type == color || readPaint.type == colorAndAngle)
+    if (readDrawGrid[y / GRIDCELLSIZE * GRIDWIDTH + x / GRIDCELLSIZE].status == 1 && (readPaint.type == color || readPaint.type == colorAndAngle))
+        for(int i = -readPaint.brushSize/2; i <= (readPaint.brushSize-1)/2; i++){
+            for (int j = -(readPaint.brushSize / 2 - abs(i)); j <= ((readPaint.brushSize - 1) / 2 - abs(i)); j++) {
+                if (y / GRIDCELLSIZE + i >= 0 && y / GRIDCELLSIZE + i < GRIDHEIGHT && x / GRIDCELLSIZE + j >= 0 && x / GRIDCELLSIZE + j < GRIDWIDTH)
                 {
                     readGrid[(y / GRIDCELLSIZE + i) * GRIDWIDTH + x / GRIDCELLSIZE + j].cellColor = readPaint.colorArray[readPaint.selectedColor];
                     readGrid[(y / GRIDCELLSIZE + i) * GRIDWIDTH + x / GRIDCELLSIZE + j].density = 25 - (abs(i) + abs(j)) * alphaDelta;
-                }
-                if ((readPaint.type == angle || readPaint.type == colorAndAngle))
-                {
-
+                    readDrawGrid[y / GRIDCELLSIZE * GRIDWIDTH + x / GRIDCELLSIZE].status = 2;   
                 }
             }
         }
+    if ((readPaint.type == angle || readPaint.type == colorAndAngle)&&readDrawGrid[prevY*GRIDWIDTH + prevX].status == 3)
+    {
+        std::cout << readDrawGrid[prevY * GRIDWIDTH + prevX].initX << ' ';
+        readDrawGrid[prevY * GRIDWIDTH + prevX].status = 4;
+        readGrid[prevY * GRIDWIDTH + prevX].angle = atan2(y - readDrawGrid[prevY * GRIDWIDTH + prevX].initY, x - readDrawGrid[prevY * GRIDWIDTH + prevX].initX) * (180.0 / PI);
+        readGrid[prevY * GRIDWIDTH + prevX].angle -= 180.0;
+        if (readGrid[prevY * GRIDWIDTH + prevX].angle < 0)
+            readGrid[prevY * GRIDWIDTH + prevX].angle += 360.0;
     }
+    prevX = x / GRIDCELLSIZE;
+    prevY = y / GRIDCELLSIZE;
 }
 
 void checkKeyboard(paintInfo& readPaint, menuInfo readInfo) {

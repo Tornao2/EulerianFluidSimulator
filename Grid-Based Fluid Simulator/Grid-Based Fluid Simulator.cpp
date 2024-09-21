@@ -11,7 +11,7 @@ int main(void)
     fillPaint(Paint);
     fillMenu(Info);
     initScreen();
-    int x = 0, y = 0, prevX = 0, prevY = 0;
+    int x = 0, y = 0, prevX = -1, prevY = -1;
     while (!WindowShouldClose())
     {
         x = GetMouseX();
@@ -25,11 +25,12 @@ int main(void)
                 drawGrid = new curGrid[GRIDHEIGHT * GRIDWIDTH];
                 fillDrawGrid(drawGrid);
             }
-            clickScene(Grid, Paint, x, y, Info, drawGrid);
+            clickScene(Grid, Paint, x, y, prevX, prevY, Info, drawGrid);
         }
         if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT) && drawGrid != NULL) {
             delete[] drawGrid;
             drawGrid = NULL;
+            prevX = prevY = -1;
         }
         if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && x > SCREENWIDTH - MENUWIDTH)
             clickMenu(Paint, x, y, Info);
