@@ -181,7 +181,7 @@ void paintScene(gridCell readGrid[GRIDHEIGHT * GRIDWIDTH], paintInfo readPaint, 
             readDrawGrid[prevY * GRIDWIDTH + prevX].status = 3;
         readDrawGrid[y / GRIDCELLSIZE * GRIDWIDTH + x / GRIDCELLSIZE].status = 1;
         readDrawGrid[y / GRIDCELLSIZE * GRIDWIDTH + x / GRIDCELLSIZE].initX = x;
-        readDrawGrid[y / GRIDCELLSIZE * GRIDWIDTH + x / GRIDCELLSIZE].initX = y;
+        readDrawGrid[y / GRIDCELLSIZE * GRIDWIDTH + x / GRIDCELLSIZE].initY = y;
     }
     if (readDrawGrid[y / GRIDCELLSIZE * GRIDWIDTH + x / GRIDCELLSIZE].status == 1 && (readPaint.type == color || readPaint.type == colorAndAngle))
         for(int i = -readPaint.brushSize/2; i <= (readPaint.brushSize-1)/2; i++){
@@ -196,7 +196,6 @@ void paintScene(gridCell readGrid[GRIDHEIGHT * GRIDWIDTH], paintInfo readPaint, 
         }
     if ((readPaint.type == angle || readPaint.type == colorAndAngle)&&readDrawGrid[prevY*GRIDWIDTH + prevX].status == 3)
     {
-        std::cout << readDrawGrid[prevY * GRIDWIDTH + prevX].initX << ' ';
         readDrawGrid[prevY * GRIDWIDTH + prevX].status = 4;
         readGrid[prevY * GRIDWIDTH + prevX].angle = atan2(y - readDrawGrid[prevY * GRIDWIDTH + prevX].initY, x - readDrawGrid[prevY * GRIDWIDTH + prevX].initX) * (180.0 / PI);
         readGrid[prevY * GRIDWIDTH + prevX].angle -= 180.0;

@@ -34,7 +34,7 @@ typedef enum brushType {
 }brushType;
 
 typedef struct curGrid {
-    int initX, initY;
+    short int initX, initY;
     unsigned char status;
 }curGrid;
 
