@@ -2,15 +2,15 @@
 
 int main(void)
 {
-    srand(time(0));
-    gridCell* Grid = new gridCell[GRIDHEIGHT*GRIDWIDTH];
-    curGrid* drawGrid = NULL;
-    paintInfo Paint;
-    menuInfo Info;
-    fillGrid(Grid);
-    fillPaint(Paint);
-    fillMenu(Info);
     initScreen();
+    srand((unsigned int) time(0));
+    s_gridInfo gridInfo;
+    s_drawHelper* drawGrid = NULL;
+    s_paintInfo paintInfo;
+    s_menuInfo menuInfo;
+    fillGrid(gridInfo);
+    fillPaint(paintInfo);
+    fillMenu(menuInfo);
     int x = 0, y = 0, prevX = -1, prevY = -1;
     while (!WindowShouldClose())
     {
@@ -22,10 +22,10 @@ int main(void)
         if (y < 0) y = 0;
         if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && x < SCREENWIDTH - MENUWIDTH) {
             if (drawGrid == NULL) {
-                drawGrid = new curGrid[GRIDHEIGHT * GRIDWIDTH];
+                drawGrid = new s_drawHelper[GRIDHEIGHT * GRIDWIDTH];
                 fillDrawGrid(drawGrid);
             }
-            clickScene(Grid, Paint, x, y, prevX, prevY, Info, drawGrid);
+            clickScene(gridInfo, paintInfo, x, y, prevX, prevY, menuInfo, drawGrid);
         }
         if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT) && drawGrid != NULL) {
             delete[] drawGrid;
@@ -33,16 +33,15 @@ int main(void)
             prevX = prevY = -1;
         }
         if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && x > SCREENWIDTH - MENUWIDTH)
-            clickMenu(Paint, x, y, Info);
-        if (Info.textField != 0)
-            checkKeyboard(Paint, Info);
-        if (Info.resetGrid) {
-            fillGrid(Grid);
-            Info.resetGrid = false;
+            clickMenu(paintInfo, x, y, menuInfo);
+        if (menuInfo.textField != 0)
+            checkKeyboard(paintInfo, menuInfo);
+        if (menuInfo.resetGrid) {
+            fillGrid(gridInfo);
+            menuInfo.resetGrid = false;
         }
-        drawScreen(Grid, Paint, Info);
+        drawScreen(gridInfo, paintInfo, menuInfo);
     }
-    delete[] Grid;
     CloseWindow();        
     return 0;
 }
