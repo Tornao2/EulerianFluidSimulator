@@ -10,13 +10,32 @@ void drawAngles(s_gridCell readCell, int readRow, int readCol) {
     DrawRectanglePro({ (float)GRIDCELLSIZE * readCol + GRIDCELLSIZE / 2, (float)GRIDCELLSIZE * readRow + GRIDCELLSIZE / 2, GRIDCELLSIZE * 3 / 8, GRIDCELLSIZE / 2 }, { GRIDCELLSIZE * 3 / 8, GRIDCELLSIZE / 4 }, readCell.angle, { 40, 130, 200, 255 });
 }
 
+void drawHorVelocity(char velocity, int x, int y) {
+    DrawRectangle(GRIDCELLSIZE * (y + 1) - abs(velocity), GRIDCELLSIZE * x + GRIDCELLSIZE / 2 - 6, abs(velocity)*2, 12, {200, 80, 80, 255});
+    DrawRectangle(GRIDCELLSIZE * (y + 1) - (velocity < 0 ? abs(velocity) : 0), GRIDCELLSIZE * x + GRIDCELLSIZE / 2 - 6, abs(velocity), 12, { 40, 130, 200, 255 });
+}
+
+void drawVerVelocity(char velocity, int x, int y) {
+    DrawRectangle(GRIDCELLSIZE * y + GRIDCELLSIZE / 2 - 6, GRIDCELLSIZE * (x + 1) - abs(velocity), 12, abs(velocity) * 2, { 200, 80, 80, 255 });
+    DrawRectangle(GRIDCELLSIZE * y + GRIDCELLSIZE / 2 - 6, GRIDCELLSIZE * (x + 1) - (velocity < 0 ? abs(velocity) : 0), 12, abs(velocity), { 40, 130, 200, 255 });
+}
+
 void drawScene(s_gridInfo& readGrid, s_menuInfo readMenu) {
     DrawRectangle(0, 0, SCREENWIDTH - MENUWIDTH, SCREENHEIGHT, BACKGROUNDCOLOR);
     for (unsigned short int row = 0; row < GRIDHEIGHT; row++)
         for (unsigned short int col = 0; col < GRIDWIDTH; col++) {
-            DrawRectangle(GRIDCELLSIZE * col, GRIDCELLSIZE * row, GRIDCELLSIZE, GRIDCELLSIZE, { readGrid.cellInfo[row * GRIDWIDTH + col].cellColor.r, readGrid.cellInfo[row * GRIDWIDTH + col].cellColor.g, readGrid.cellInfo[row * GRIDWIDTH + col].cellColor.b, readGrid.cellInfo[row * GRIDWIDTH + col].density > 255 ? (unsigned char) 255 : (unsigned char) readGrid.cellInfo[row * GRIDWIDTH + col].density });
-            if (readMenu.displayAngles && !(readGrid.cellInfo[row * GRIDWIDTH + col].cellColor == BLACK) && readGrid.cellInfo[row * GRIDWIDTH + col].angle != 360) drawAngles(readGrid.cellInfo[row * GRIDWIDTH + col], row, col);
+            DrawRectangle(GRIDCELLSIZE * col, GRIDCELLSIZE * row, GRIDCELLSIZE, GRIDCELLSIZE, { readGrid.cellInfo[row * GRIDWIDTH + col].cellColor.r, readGrid.cellInfo[row * GRIDWIDTH + col].cellColor.g, readGrid.cellInfo[row * GRIDWIDTH + col].cellColor.b, readGrid.cellInfo[row * GRIDWIDTH + col].density > 255 ? (unsigned char) 255 : (unsigned char) readGrid.cellInfo[row * GRIDWIDTH + col].density });         
+            if (readMenu.displayAngles && !(readGrid.cellInfo[row * GRIDWIDTH + col].cellColor == BLACK) && readGrid.cellInfo[row * GRIDWIDTH + col].angle != 360) drawAngles(readGrid.cellInfo[row * GRIDWIDTH + col], row, col);               
+        }
+    if (readMenu.displayVelocities) {
+        for (unsigned short int row = 0; row < GRIDHEIGHT; row++)
+            for (unsigned short int col = 0; col < GRIDWIDTH; col++) {
+                if (col < GRIDWIDTH - 1)
+                    drawHorVelocity(readGrid.horizontalMov[row * (GRIDWIDTH - 1) + col], row, col);
+                if (row < GRIDHEIGHT - 1)
+                    drawVerVelocity(readGrid.verticalMov[row * (GRIDWIDTH - 1) + col], row, col);
             }
+    }
 }
 
 void drawMenu(s_paintInfo readPaint, s_menuInfo readMenu) {
@@ -81,12 +100,13 @@ void fillGrid(s_gridInfo& readGrid) {
             readGrid.cellInfo[row * GRIDWIDTH + col].density = 0;
             readGrid.cellInfo[row * GRIDWIDTH + col].angle = 360;
         }
-    for (int i = 0; i < GRIDHEIGHT; i++)
-        for (int j = 0; j < GRIDWIDTH - 1; j++)
-            readGrid.verticalMov[j + i * (GRIDHEIGHT - 1)] = 0;
-    for (int i = 0; i < GRIDWIDTH; i++)
-        for (int j = 0; j < GRIDHEIGHT - 1; j++)
-            readGrid.horizontalMov[j + i * (GRIDWIDTH - 1)] = 0;
+    for (int i = 0; i < GRIDHEIGHT-1; i++)
+        for (int j = 0; j < GRIDWIDTH; j++)
+            readGrid.verticalMov[j + i * GRIDWIDTH] = 0;
+    for (int i = 0; i < GRIDWIDTH - 1; i++)
+        for (int j = 0; j < GRIDHEIGHT; j++) 
+            readGrid.horizontalMov[j + i * GRIDHEIGHT] = 0;
+      
 }
 
 void fillPaint(s_paintInfo& readPaint) {
@@ -308,4 +328,8 @@ bool operator==(Color x, Color y) {
     if (x.b != y.b) return false;
     if (x.a != y.a) return false;
     return true;
+}
+
+void move(s_gridInfo& readGrid) {
+
 }

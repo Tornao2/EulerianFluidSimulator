@@ -31,8 +31,8 @@ typedef enum e_brushType {
 
 typedef struct s_gridInfo {
     s_gridCell cellInfo[GRIDWIDTH * GRIDHEIGHT];
-    unsigned char horizontalMov[(GRIDWIDTH - 1) * GRIDHEIGHT];
-    unsigned char verticalMov[GRIDWIDTH * (GRIDHEIGHT - 1)];
+    char horizontalMov[(GRIDWIDTH - 1) * GRIDHEIGHT];
+    char verticalMov[GRIDWIDTH * (GRIDHEIGHT - 1)];
 }s_gridInfo;
 
 typedef struct s_drawHelper {
@@ -57,6 +57,8 @@ typedef struct s_menuInfo {
 
 void initScreen();
 void drawAngles(s_gridCell readCell, int readRow, int readCol);
+void drawHorVelocity(char velocity, int x, int y);
+void drawVerVelocity(char velocity, int x, int y);
 void drawScene(s_gridInfo& readGrid, s_menuInfo readMenu);
 void drawMenu(s_paintInfo readPaint, s_menuInfo readMenu);
 void drawScreen(s_gridInfo& readGrid, s_paintInfo readPaint, s_menuInfo readMenu);
