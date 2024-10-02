@@ -70,3 +70,4 @@ void paintScene(s_gridInfo& readGrid, s_paintInfo readPaint, int x, int y, int& 
 void checkKeyboard(s_paintInfo& readPaint, s_menuInfo readMenu);
 void handleNumbers(int min, int max, unsigned char& number);
 bool operator==(Color x, Color y);
+void move(s_gridInfo& readGrid);

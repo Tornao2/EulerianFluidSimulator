@@ -32,6 +32,9 @@ int main(void)
             drawGrid = NULL;
             prevX = prevY = -1;
         }
+        if (IsKeyPressed(KEY_ONE)) {
+
+        }
         if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && x > SCREENWIDTH - MENUWIDTH)
             clickMenu(paintInfo, x, y, menuInfo);
         if (menuInfo.textField != 0)

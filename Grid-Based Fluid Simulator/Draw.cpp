@@ -6,8 +6,8 @@ void initScreen() {
 }
 
 void drawAngles(s_gridCell readCell, int readRow, int readCol) {
-    DrawRectanglePro({ (float)GRIDCELLSIZE * readCol + GRIDCELLSIZE / 2, (float)GRIDCELLSIZE * readRow + GRIDCELLSIZE / 2, GRIDCELLSIZE * 3 / 4, GRIDCELLSIZE / 2 }, { GRIDCELLSIZE * 3 / 8, GRIDCELLSIZE / 4 }, readCell.angle, { 255, 80, 80, 255 });
-    DrawRectanglePro({ (float)GRIDCELLSIZE * readCol + GRIDCELLSIZE / 2, (float)GRIDCELLSIZE * readRow + GRIDCELLSIZE / 2, GRIDCELLSIZE * 3 / 8, GRIDCELLSIZE / 2 }, { GRIDCELLSIZE * 3 / 8, GRIDCELLSIZE / 4 }, readCell.angle, { 40, 130, 255, 255 });
+    DrawRectanglePro({ (float)GRIDCELLSIZE * readCol + GRIDCELLSIZE / 2, (float)GRIDCELLSIZE * readRow + GRIDCELLSIZE / 2, GRIDCELLSIZE * 3 / 4, GRIDCELLSIZE / 2 }, { GRIDCELLSIZE * 3 / 8, GRIDCELLSIZE / 4 }, readCell.angle, { 200, 80, 80, 255 });
+    DrawRectanglePro({ (float)GRIDCELLSIZE * readCol + GRIDCELLSIZE / 2, (float)GRIDCELLSIZE * readRow + GRIDCELLSIZE / 2, GRIDCELLSIZE * 3 / 8, GRIDCELLSIZE / 2 }, { GRIDCELLSIZE * 3 / 8, GRIDCELLSIZE / 4 }, readCell.angle, { 40, 130, 200, 255 });
 }
 
 void drawScene(s_gridInfo& readGrid, s_menuInfo readMenu) {
@@ -103,6 +103,7 @@ void fillMenu(s_menuInfo& readMenu){
     readMenu.textField = 0;
     readMenu.resetGrid = false;
     readMenu.displayAngles = false;
+    readMenu.displayVelocities = false;
 }
 
 void fillDrawGrid(s_drawHelper readDrawGrid[GRIDHEIGHT * GRIDWIDTH]) {
@@ -205,12 +206,19 @@ void paintScene(s_gridInfo& readGrid, s_paintInfo readPaint, int x, int y, int& 
             }
         }
     if ((readPaint.type == angle || readPaint.type == colorAndAngle)&&readDrawGrid[prevY*GRIDWIDTH + prevX].status == 3)
-    {
-        readDrawGrid[prevY * GRIDWIDTH + prevX].status = 4;
-        readGrid.cellInfo[prevY * GRIDWIDTH + prevX].angle = (float)atan2(y - readDrawGrid[prevY * GRIDWIDTH + prevX].initY, x - readDrawGrid[prevY * GRIDWIDTH + prevX].initX) * (180.0 / PI);
-        readGrid.cellInfo[prevY * GRIDWIDTH + prevX].angle -= 180.0;
-        if (readGrid.cellInfo[prevY * GRIDWIDTH + prevX].angle < 0)
-            readGrid.cellInfo[prevY * GRIDWIDTH + prevX].angle += 360.0;
+    {     
+        for (int i = -readPaint.brushSize / 2; i <= (readPaint.brushSize - 1) / 2; i++) {
+            for (int j = -(readPaint.brushSize / 2 - abs(i)); j <= ((readPaint.brushSize - 1) / 2 - abs(i)); j++) {
+                if (prevY + i >= 0 && prevY + i < GRIDHEIGHT && prevX + j >= 0 && prevX + j < GRIDWIDTH)
+                {
+                    readDrawGrid[(prevY + i) * GRIDWIDTH + (prevX+j)].status = 4;
+                    readGrid.cellInfo[(prevY + i) * GRIDWIDTH + (prevX + j)].angle = (float)atan2(y - readDrawGrid[prevY * GRIDWIDTH + prevX].initY, x - readDrawGrid[prevY * GRIDWIDTH + prevX].initX) * (180.0 / PI);
+                    readGrid.cellInfo[(prevY + i) * GRIDWIDTH + (prevX + j)].angle -= 180.0;
+                    if (readGrid.cellInfo[(prevY + i) * GRIDWIDTH + (prevX + j)].angle < 0)
+                        readGrid.cellInfo[(prevY + i) * GRIDWIDTH + (prevX + j)].angle += 360.0;
+                }
+            }
+        }
     }
     prevX = x / GRIDCELLSIZE;
     prevY = y / GRIDCELLSIZE;
