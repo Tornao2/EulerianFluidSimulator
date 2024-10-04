@@ -19,14 +19,13 @@ constexpr int FONTSIZE = 36;
 typedef struct s_gridCell {
     Color cellColor;
     unsigned short int density;
-    float angle;
 }s_gridCell;
 
 typedef enum e_brushType {
     color,
-    angle,
+    vel,
     gens,
-    colorAndAngle
+    colorAndVelocity
 }e_brushType;
 
 typedef struct s_gridInfo {
@@ -51,12 +50,10 @@ typedef struct s_paintInfo {
 typedef struct s_menuInfo {
     int textField;
     bool resetGrid;
-    bool displayAngles;
     bool displayVelocities;
 }s_menuInfo;
 
 void initScreen();
-void drawAngles(s_gridCell readCell, int readRow, int readCol);
 void drawHorVelocity(char velocity, int x, int y);
 void drawVerVelocity(char velocity, int x, int y);
 void drawScene(s_gridInfo& readGrid, s_menuInfo readMenu);
