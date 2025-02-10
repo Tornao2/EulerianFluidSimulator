@@ -1,8 +1,17 @@
-#include "Draw.h"
+#include "Engine.h"
 
-void initScreen() {
-    InitWindow(SCREENWIDTH, SCREENHEIGHT, "Fluid Simulator");
-    SetTargetFPS(FRAMERATE);
+Engine::Engine() {
+    display = nullptr;
+    menuDrawer = nullptr;
+}
+
+void Engine::setUpDisplay(short int getWidth, short int getHeight, char getFramerate) {
+    display = new Display(getWidth, getHeight, getFramerate);
+    display->initScreen();
+}
+
+void Engine::setUpMenu(short int getWidth, short int getHeight) {
+    menuDrawer = new MenuDrawer(display->getWidth() - getWidth, display->getHeight() - getHeight);
 }
 
 void drawHorVelocity(char velocity, int x, int y) {
@@ -18,16 +27,15 @@ void drawVerVelocity(char velocity, int x, int y) {
 void drawScene(s_gridInfo& readGrid, s_menuInfo readMenu) {
     DrawRectangle(0, 0, SCREENWIDTH - MENUWIDTH, SCREENHEIGHT, BACKGROUNDCOLOR);
     for (unsigned short int row = 0; row < GRIDHEIGHT; row++)
-        for (unsigned short int col = 0; col < GRIDWIDTH; col++) {
-            DrawRectangle(GRIDCELLSIZE * col, GRIDCELLSIZE * row, GRIDCELLSIZE, GRIDCELLSIZE, { readGrid.cellInfo[row * GRIDWIDTH + col].cellColor.r, readGrid.cellInfo[row * GRIDWIDTH + col].cellColor.g, readGrid.cellInfo[row * GRIDWIDTH + col].cellColor.b, readGrid.cellInfo[row * GRIDWIDTH + col].density > 255 ? (unsigned char) 255 : (unsigned char) readGrid.cellInfo[row * GRIDWIDTH + col].density });         
-        }
+        for (unsigned short int col = 0; col < GRIDWIDTH; col++) 
+            DrawRectangle(GRIDCELLSIZE * col, GRIDCELLSIZE * row, GRIDCELLSIZE, GRIDCELLSIZE, { readGrid.cellInfo[row * GRIDWIDTH + col].cellColor.r, readGrid.cellInfo[row * GRIDWIDTH + col].cellColor.g, readGrid.cellInfo[row * GRIDWIDTH + col].cellColor.b, readGrid.cellInfo[row * GRIDWIDTH + col].density > 255 ? (unsigned char) 255 : (unsigned char) readGrid.cellInfo[row * GRIDWIDTH + col].density });               
     if (readMenu.displayVelocities) {
         for (unsigned short int row = 0; row < GRIDHEIGHT; row++)
             for (unsigned short int col = 0; col < GRIDWIDTH; col++) {
                 if (col < GRIDWIDTH - 1)
                     drawHorVelocity(readGrid.horizontalMov[row * (GRIDWIDTH - 1) + col], row, col);
-                if (row < GRIDHEIGHT - 1)
-                    drawVerVelocity(readGrid.verticalMov[row * (GRIDWIDTH - 1) + col], row, col);
+                if (row < GRIDHEIGHT - 1) 
+                    drawVerVelocity(readGrid.verticalMov[row * GRIDWIDTH + col], row, col);                           
             }
     }
 }
@@ -216,8 +224,7 @@ void paintScene(s_gridInfo& readGrid, s_paintInfo readPaint, int x, int y, int& 
                 if (prevY + i >= 0 && prevY + i < GRIDHEIGHT && prevX + j >= 0 && prevX + j < GRIDWIDTH)
                 {
                     readDrawGrid[(prevY + i) * GRIDWIDTH + (prevX + j)].status = 4;
-                    std::cout << (prevX + j) << ' ';
-                    readGrid.verticalMov[(prevY + i) * (GRIDWIDTH-1)+(prevX + j)] = (y - readDrawGrid[prevY * GRIDWIDTH + prevX].initY) / 3;
+                    if ((prevY + i) * (GRIDWIDTH - 1) + (prevX + j) < 280) readGrid.verticalMov[(prevY + i) * (GRIDWIDTH-1)+(prevX + j)] = (y - readDrawGrid[prevY * GRIDWIDTH + prevX].initY) / 3;
                     readGrid.horizontalMov[(prevY + i) * (GRIDWIDTH - 1) + (prevX + j)] = (x - readDrawGrid[prevY * GRIDWIDTH + prevX].initX) / 3;
                 }
             }

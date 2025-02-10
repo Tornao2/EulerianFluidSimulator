@@ -1,9 +1,16 @@
-#include "Draw.h"
+#include "Engine.h"
+
+constexpr int MENUWIDTH = 300;
+constexpr int SCREENWIDTH = 1500;
+constexpr int SCREENHEIGHT = 900;
+constexpr int FRAMERATE = 60;
 
 int main(void)
 {
-    initScreen();
-    srand((unsigned int) time(0));
+    Engine engine;
+    engine.setUpDisplay(SCREENWIDTH, SCREENHEIGHT, FRAMERATE);
+    engine.setUpMenu(MENUWIDTH, 0);
+
     s_gridInfo gridInfo;
     s_drawHelper* drawGrid = NULL;
     s_paintInfo paintInfo;
@@ -48,3 +55,5 @@ int main(void)
     CloseWindow();        
     return 0;
 }
+
+//need to rework the velocities drawing/painitng etc

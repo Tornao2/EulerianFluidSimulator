@@ -1,14 +1,19 @@
 #pragma once
-#include "raylib.h"
+#include "Display.h"
+#include "MenuDrawer.h"
 #include <cmath>
 #include <iostream>
-#include <time.h>
 
-constexpr int SCREENWIDTH = 1500;
-constexpr int SCREENHEIGHT = 900;
-constexpr int FRAMERATE = 60;
+class Engine {
+    Display* display;
+    MenuDrawer* menuDrawer;
+public:
+    Engine();
+    void setUpDisplay(short int getWidth, short int getHeight, char getFramerate);
+    void setUpMenu(short int getWidth, short int getHeight);
+};
+
 constexpr int GRIDCELLSIZE = 60;
-constexpr int MENUWIDTH = 300;
 constexpr int GRIDWIDTH = (SCREENWIDTH - MENUWIDTH) / GRIDCELLSIZE;
 constexpr int GRIDHEIGHT = SCREENHEIGHT / GRIDCELLSIZE;
 constexpr Color BACKGROUNDCOLOR = { 7, 7, 9, 255 };
@@ -21,12 +26,7 @@ typedef struct s_gridCell {
     unsigned short int density;
 }s_gridCell;
 
-typedef enum e_brushType {
-    color,
-    vel,
-    gens,
-    colorAndVelocity
-}e_brushType;
+
 
 typedef struct s_gridInfo {
     s_gridCell cellInfo[GRIDWIDTH * GRIDHEIGHT];
@@ -39,25 +39,9 @@ typedef struct s_drawHelper {
     unsigned char status;
 }s_drawHelper;
 
-typedef struct s_paintInfo {
-    Color colorArray[9];
-    int selectedColor;
-    unsigned char brushSize;
-    e_brushType type;
-    unsigned char specialType;
-}s_paintInfo;
-
-typedef struct s_menuInfo {
-    int textField;
-    bool resetGrid;
-    bool displayVelocities;
-}s_menuInfo;
-
-void initScreen();
 void drawHorVelocity(char velocity, int x, int y);
 void drawVerVelocity(char velocity, int x, int y);
 void drawScene(s_gridInfo& readGrid, s_menuInfo readMenu);
-void drawMenu(s_paintInfo readPaint, s_menuInfo readMenu);
 void drawScreen(s_gridInfo& readGrid, s_paintInfo readPaint, s_menuInfo readMenu);
 void fillGrid(s_gridInfo& readGrid);
 void fillPaint(s_paintInfo& readPaint);
