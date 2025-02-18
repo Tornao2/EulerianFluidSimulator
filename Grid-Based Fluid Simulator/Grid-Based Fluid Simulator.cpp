@@ -1,6 +1,7 @@
 #include "Engine.h"
 
 constexpr int MENUWIDTH = 300;
+constexpr int MENUHEIGHT = 300;
 constexpr int SCREENWIDTH = 1500;
 constexpr int SCREENHEIGHT = 900;
 constexpr int FRAMERATE = 60;
@@ -9,18 +10,14 @@ int main(void)
 {
     Engine engine;
     engine.setUpDisplay(SCREENWIDTH, SCREENHEIGHT, FRAMERATE);
-    engine.setUpMenu(MENUWIDTH, 0);
-
-    s_gridInfo gridInfo;
-    s_drawHelper* drawGrid = NULL;
-    s_paintInfo paintInfo;
-    s_menuInfo menuInfo;
-    fillGrid(gridInfo);
-    fillPaint(paintInfo);
-    fillMenu(menuInfo);
+    engine.setUpMenu(MENUWIDTH, MENUHEIGHT);
+    //s_gridInfo gridInfo;
+    //s_drawHelper* drawGrid = NULL;
+    //fillGrid(gridInfo);
     int x = 0, y = 0, prevX = -1, prevY = -1;
     while (!WindowShouldClose())
     {
+        /*
         x = GetMouseX();
         if (x >= SCREENWIDTH) x = SCREENWIDTH - 1;
         if (x < 0) x = 0;
@@ -28,32 +25,28 @@ int main(void)
         if (y >= SCREENHEIGHT) x = SCREENHEIGHT - 1;
         if (y < 0) y = 0;
         if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && x < SCREENWIDTH - MENUWIDTH) {
-            if (drawGrid == NULL) {
-                drawGrid = new s_drawHelper[GRIDHEIGHT * GRIDWIDTH];
-                fillDrawGrid(drawGrid);
-            }
-            clickScene(gridInfo, paintInfo, x, y, prevX, prevY, menuInfo, drawGrid);
+            //if (drawGrid == NULL) {
+            //    drawGrid = new s_drawHelper[GRIDHEIGHT * GRIDWIDTH];
+            //    fillDrawGrid(drawGrid);
+            //}
+            //clickScene(gridInfo, paintInfo, x, y, prevX, prevY, menuInfo, drawGrid);
         }
         if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT) && drawGrid != NULL) {
-            delete[] drawGrid;
-            drawGrid = NULL;
-            prevX = prevY = -1;
+            //delete[] drawGrid;
+            //drawGrid = NULL;
+            //prevX = prevY = -1;
         }
-        if (IsKeyPressed(KEY_ONE)) {
-
-        }
-        if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && x > SCREENWIDTH - MENUWIDTH)
-            clickMenu(paintInfo, x, y, menuInfo);
-        if (menuInfo.textField != 0)
-            checkKeyboard(paintInfo, menuInfo);
-        if (menuInfo.resetGrid) {
-            fillGrid(gridInfo);
-            menuInfo.resetGrid = false;
-        }
-        drawScreen(gridInfo, paintInfo, menuInfo);
+        //if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && x > SCREENWIDTH - MENUWIDTH)
+            //clickMenu(paintInfo, x, y, menuInfo);
+        //if (menuInfo.textField != 0)
+            //checkKeyboard(paintInfo, menuInfo);
+        //if (menuInfo.resetGrid) {
+           // fillGrid(gridInfo);
+            //menuInfo.resetGrid = false;
+        //}
+        */
+        engine.drawScreen();
     }
     CloseWindow();        
     return 0;
 }
-
-//need to rework the velocities drawing/painitng etc

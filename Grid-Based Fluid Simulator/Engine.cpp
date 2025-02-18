@@ -2,7 +2,7 @@
 
 Engine::Engine() {
     display = nullptr;
-    menuDrawer = nullptr;
+    menu = nullptr;
 }
 
 void Engine::setUpDisplay(short int getWidth, short int getHeight, char getFramerate) {
@@ -11,9 +11,18 @@ void Engine::setUpDisplay(short int getWidth, short int getHeight, char getFrame
 }
 
 void Engine::setUpMenu(short int getWidth, short int getHeight) {
-    menuDrawer = new MenuDrawer(display->getWidth() - getWidth, display->getHeight() - getHeight);
+    menu = new Menu(display->getWidth() - getWidth, display->getHeight() - getHeight, getWidth, getHeight);
 }
 
+void Engine::drawScreen() {
+    BeginDrawing();
+    ClearBackground(MENUCOLOR);
+    //drawScene(readGrid, readMenu);
+    menu->drawMenu();
+    EndDrawing();
+}
+
+/*
 void drawHorVelocity(char velocity, int x, int y) {
     DrawRectangle(GRIDCELLSIZE * (y + 1) - abs(velocity), GRIDCELLSIZE * x + GRIDCELLSIZE / 2 - 6, abs(velocity)*2, 12, {200, 80, 80, 255});
     DrawRectangle(GRIDCELLSIZE * (y + 1) - (velocity < 0 ? abs(velocity) : 0), GRIDCELLSIZE * x + GRIDCELLSIZE / 2 - 6, abs(velocity), 12, { 40, 130, 200, 255 });
@@ -38,60 +47,7 @@ void drawScene(s_gridInfo& readGrid, s_menuInfo readMenu) {
                     drawVerVelocity(readGrid.verticalMov[row * GRIDWIDTH + col], row, col);                           
             }
     }
-}
-
-void drawMenu(s_paintInfo readPaint, s_menuInfo readMenu) {
-    for (int i = 0; i < 2; i++) 
-        for (int j = 0; j < 4; j++) 
-            DrawRectangle(SCREENWIDTH - MENUWIDTH * (58 - 15 * j) / 64, (80 + i * 80), MENUWIDTH / 8, MENUWIDTH / 8, BLACK);
-    for (int i = 0; i < 8; i++)
-        DrawRectangle(SCREENWIDTH - MENUWIDTH * (58 - 15 * (i % 4)) / 64 + MENUWIDTH/48, 80 + i/4 * 80 + MENUWIDTH / 48, MENUWIDTH / 12, MENUWIDTH / 12, readPaint.colorArray[i+1]);
-    DrawText("Colors", SCREENWIDTH - MENUWIDTH / 2 - MeasureText("Colors", FONTSIZE) / 2, 5, FONTSIZE, BLACK);
-    DrawText("1", SCREENWIDTH - MENUWIDTH * 8 / 9 + MeasureText("1", FONTSIZE) / 2, 45, FONTSIZE, readPaint.selectedColor == 1 ? DARKGREEN : BLACK);
-    DrawText("2", SCREENWIDTH - MENUWIDTH * 6 / 9 + MeasureText("2", FONTSIZE) / 2, 45, FONTSIZE, readPaint.selectedColor == 2 ? DARKGREEN : BLACK);
-    DrawText("3", SCREENWIDTH - MENUWIDTH * 4 / 9 + MeasureText("3", FONTSIZE) / 2, 45, FONTSIZE, readPaint.selectedColor == 3 ? DARKGREEN : BLACK);
-    DrawText("4", SCREENWIDTH - MENUWIDTH * 2 / 9 + MeasureText("4", FONTSIZE) / 2, 45, FONTSIZE, readPaint.selectedColor == 4 ? DARKGREEN : BLACK);
-    DrawText("5", SCREENWIDTH - MENUWIDTH * 8 / 9 + MeasureText("5", FONTSIZE) / 2, 125, FONTSIZE, readPaint.selectedColor == 5 ? DARKGREEN : BLACK);
-    DrawText("6", SCREENWIDTH - MENUWIDTH * 6 / 9 + MeasureText("6", FONTSIZE) / 2, 125, FONTSIZE, readPaint.selectedColor == 6 ? DARKGREEN : BLACK);
-    DrawText("7", SCREENWIDTH - MENUWIDTH * 4 / 9 + MeasureText("7", FONTSIZE) / 2, 125, FONTSIZE, readPaint.selectedColor == 7 ? DARKGREEN : BLACK);
-    DrawText("8", SCREENWIDTH - MENUWIDTH * 2 / 9 + MeasureText("8", FONTSIZE) / 2, 125, FONTSIZE, readPaint.selectedColor == 8 ? DARKGREEN : BLACK);
-    DrawText("Obstruction", SCREENWIDTH - MENUWIDTH / 2 - MeasureText("Obstruction", FONTSIZE)/2, 205, FONTSIZE, readPaint.selectedColor == 0 ? DARKGREEN : BLACK);
-    if (readPaint.selectedColor != 0) {
-        for(int i = 0; i < 3; i++)
-            DrawRectangle(SCREENWIDTH - MENUWIDTH * (15 - i * 5) / 16, 250, MENUWIDTH / 4, 40, (readMenu.textField - 1) == i ? SELECTCOLOR : WHITE);
-        DrawText(TextFormat("%i", readPaint.colorArray[readPaint.selectedColor].r), SCREENWIDTH - MENUWIDTH * 13 / 16 - MeasureText(TextFormat("%i", readPaint.colorArray[readPaint.selectedColor].r), FONTSIZE) / 2, 252, FONTSIZE, BLACK);
-        DrawText(TextFormat("%i", readPaint.colorArray[readPaint.selectedColor].g), SCREENWIDTH - MENUWIDTH / 2 - MeasureText(TextFormat("%i", readPaint.colorArray[readPaint.selectedColor].g), FONTSIZE) / 2, 252, FONTSIZE, BLACK);
-        DrawText(TextFormat("%i", readPaint.colorArray[readPaint.selectedColor].b), SCREENWIDTH - MENUWIDTH * 3 / 16 - MeasureText(TextFormat("%i", readPaint.colorArray[readPaint.selectedColor].b), FONTSIZE) / 2, 252, FONTSIZE, BLACK);
-        DrawText("R", SCREENWIDTH - MENUWIDTH * 13 / 16 - MeasureText("R", FONTSIZE) / 2, 295, FONTSIZE, BLACK);
-        DrawText("G", SCREENWIDTH - MENUWIDTH / 2 - MeasureText("G", FONTSIZE) / 2, 295, FONTSIZE, BLACK);
-        DrawText("B", SCREENWIDTH - MENUWIDTH * 3 / 16 - MeasureText("B", FONTSIZE) / 2, 295, FONTSIZE, BLACK);
-    }
-    DrawText("Reset scene", SCREENWIDTH - MENUWIDTH / 2 - MeasureText("Reset scene", FONTSIZE) / 2, 340, FONTSIZE, RED);
-    DrawText("Brush size:", SCREENWIDTH - MENUWIDTH * 19 / 20, 385, FONTSIZE * 3 / 4, BLACK);
-    DrawRectangle(SCREENWIDTH - MENUWIDTH / 4, 384, MENUWIDTH / 8, MENUWIDTH / 10, readMenu.textField == 4 ? SELECTCOLOR : WHITE);
-    DrawText(TextFormat("%i", readPaint.brushSize), SCREENWIDTH - MENUWIDTH * 3 / 16 - MeasureText(TextFormat("%i", readPaint.brushSize), FONTSIZE*3/4) / 2, 386, FONTSIZE*3/4, BLACK);
-    DrawText("Toggle velocity:", SCREENWIDTH - MENUWIDTH * 19 / 20, 426, FONTSIZE * 3 / 4, BLACK);
-    DrawRectangle(SCREENWIDTH - MENUWIDTH / 4, 424, MENUWIDTH / 8, MENUWIDTH / 10, readMenu.displayVelocities ? GREEN : RED);
-    DrawText("Brush mode:", SCREENWIDTH - MENUWIDTH/2 - (MeasureText("Brush mode", FONTSIZE))/2, 468, FONTSIZE, BLACK);
-    DrawText("Color", SCREENWIDTH - MENUWIDTH * 1 / 6 - (MeasureText("Color", FONTSIZE*3/4)) / 2, 508, FONTSIZE*3/4, readPaint.type == color ? DARKGREEN : BLACK);
-    DrawText("Velocity", SCREENWIDTH - MENUWIDTH * 3 / 6 - (MeasureText("Velocity", FONTSIZE * 3 / 4)) / 2, 508, FONTSIZE * 3 / 4, readPaint.type == vel ? DARKGREEN : BLACK);
-    DrawText("Gens", SCREENWIDTH - MENUWIDTH * 5 / 6 - (MeasureText("Gens", FONTSIZE * 3 / 4)) / 2, 508, FONTSIZE * 3 / 4, readPaint.type == gens ? DARKGREEN : BLACK);
-    DrawText("Color + Velocity", SCREENWIDTH - MENUWIDTH /2  - (MeasureText("Color + Velocity", FONTSIZE * 3 / 4)) / 2, 538, FONTSIZE * 3 / 4, readPaint.type == colorAndVelocity ? DARKGREEN : BLACK);
-    if (readPaint.type == gens)
-        for (int i = 0; i < 4; i++) {
-            DrawRectangle(1230 + i * 70, 570, 40, 40, readPaint.specialType == i + 1 ? SELECTCOLOR : WHITE);
-            DrawRectanglePro({ (float) 1250 + i * 70, (float) 590, 26, 16 }, { 13, 8 }, (float)i * 90, BLACK);
-            DrawRectanglePro({ (float)1250 + i * 70, (float)590, 13, 16 }, { 13, 8 }, (float)i * 90, BLUE);
-        }
-}
-
-void drawScreen(s_gridInfo& readGrid, s_paintInfo readPaint, s_menuInfo readMenu) {
-    BeginDrawing();
-    ClearBackground(MENUCOLOR);
-    drawScene(readGrid, readMenu);
-    drawMenu(readPaint, readMenu);
-    EndDrawing();
-}
+}   
 
 void fillGrid(s_gridInfo& readGrid) {
     for (int row = 0; row < GRIDHEIGHT; row++)
@@ -106,22 +62,6 @@ void fillGrid(s_gridInfo& readGrid) {
         for (int j = 0; j < GRIDHEIGHT; j++) 
             readGrid.horizontalMov[j + i * GRIDHEIGHT] = 0;
       
-}
-
-void fillPaint(s_paintInfo& readPaint) {
-    readPaint.colorArray[0] = BLACK;
-    for (int i = 1; i < 9; i++) 
-        readPaint.colorArray[i] = WHITE;
-    readPaint.selectedColor = 1;
-    readPaint.brushSize = 1;
-    readPaint.type = colorAndVelocity;
-    readPaint.specialType = 0;
-}
-
-void fillMenu(s_menuInfo& readMenu){
-    readMenu.textField = 0;
-    readMenu.resetGrid = false;
-    readMenu.displayVelocities = false;
 }
 
 void fillDrawGrid(s_drawHelper readDrawGrid[GRIDHEIGHT * GRIDWIDTH]) {
@@ -311,15 +251,4 @@ void handleNumbers(int min, int max, unsigned char& number) {
         }
     }
 }
-
-bool operator==(Color x, Color y) {
-    if (x.r != y.r) return false;
-    if (x.g != y.g) return false;
-    if (x.b != y.b) return false;
-    if (x.a != y.a) return false;
-    return true;
-}
-
-void move(s_gridInfo& readGrid) {
-
-}
+*/
