@@ -11,7 +11,12 @@ class Menu {
 	bool resetGrid, displayVelocities;
 	Color colorArray[9];
 	e_brushType* brushType;
+	void handleNumbers(int min, int max, unsigned char& number);
 public:
 	Menu(short int getX, short int getY, short int getWidth, short int getHeight);
 	void drawMenu();
+	bool getResetGrid();
+	void setResetGrid(bool setReset);
+	void checkKeyboard();
+	unsigned char getTextField();
 };

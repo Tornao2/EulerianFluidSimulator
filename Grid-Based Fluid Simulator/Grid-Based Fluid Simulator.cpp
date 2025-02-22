@@ -1,7 +1,7 @@
 #include "Engine.h"
 
 constexpr int MENUWIDTH = 300;
-constexpr int MENUHEIGHT = 300;
+constexpr int MENUHEIGHT = 900;
 constexpr int SCREENWIDTH = 1500;
 constexpr int SCREENHEIGHT = 900;
 constexpr int FRAMERATE = 60;
@@ -17,13 +17,13 @@ int main(void)
     int x = 0, y = 0, prevX = -1, prevY = -1;
     while (!WindowShouldClose())
     {
-        /*
         x = GetMouseX();
         if (x >= SCREENWIDTH) x = SCREENWIDTH - 1;
         if (x < 0) x = 0;
         y = GetMouseY();
         if (y >= SCREENHEIGHT) x = SCREENHEIGHT - 1;
         if (y < 0) y = 0;
+        /*
         if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && x < SCREENWIDTH - MENUWIDTH) {
             //if (drawGrid == NULL) {
             //    drawGrid = new s_drawHelper[GRIDHEIGHT * GRIDWIDTH];
@@ -38,13 +38,13 @@ int main(void)
         }
         //if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && x > SCREENWIDTH - MENUWIDTH)
             //clickMenu(paintInfo, x, y, menuInfo);
-        //if (menuInfo.textField != 0)
-            //checkKeyboard(paintInfo, menuInfo);
-        //if (menuInfo.resetGrid) {
-           // fillGrid(gridInfo);
-            //menuInfo.resetGrid = false;
-        //}
-        */
+            */
+        if (engine.getMenu()->getTextField() != 0)
+            engine.getMenu()->checkKeyboard();
+        if (engine.getMenu()->getResetGrid()) {
+            //fillGrid(gridInfo);
+            engine.getMenu()->setResetGrid(false);
+        }
         engine.drawScreen();
     }
     CloseWindow();        

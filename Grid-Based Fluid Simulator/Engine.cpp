@@ -14,6 +14,10 @@ void Engine::setUpMenu(short int getWidth, short int getHeight) {
     menu = new Menu(display->getWidth() - getWidth, display->getHeight() - getHeight, getWidth, getHeight);
 }
 
+Menu* Engine::getMenu() {
+    return menu;
+}
+
 void Engine::drawScreen() {
     BeginDrawing();
     ClearBackground(MENUCOLOR);
@@ -172,83 +176,5 @@ void paintScene(s_gridInfo& readGrid, s_paintInfo readPaint, int x, int y, int& 
     }
     prevX = x / GRIDCELLSIZE;
     prevY = y / GRIDCELLSIZE;
-}
-
-void checkKeyboard(s_paintInfo& readPaint, s_menuInfo readMenu) {
-    switch (readMenu.textField) {
-    case 1:
-        handleNumbers(0, 255, readPaint.colorArray[readPaint.selectedColor].r);
-        break;
-    case 2:
-        handleNumbers(0, 255, readPaint.colorArray[readPaint.selectedColor].g);
-        break;
-    case 3:
-        handleNumbers(0, 255, readPaint.colorArray[readPaint.selectedColor].b);
-        break;
-    case 4:
-        handleNumbers(0, 19, readPaint.brushSize);
-        break;
-    }
-}
-
-void handleNumbers(int min, int max, unsigned char& number) {
-    if (GetKeyPressed() != 0){
-        if (IsKeyPressed(KEY_BACKSPACE)) {
-            number /= 10;
-            if (number < min)
-                number = min;
-        }
-        else {
-            unsigned short int tempTest = number;
-            unsigned char countDigits = 0;
-            unsigned char countDigitsTemp = number;
-            do {
-                countDigits++;
-                countDigitsTemp = countDigitsTemp / 10;
-            } while (countDigitsTemp != 0);
-            if (IsKeyPressed(KEY_ONE)) {
-                tempTest *= 10;
-                tempTest += 1;
-            }
-            else if (IsKeyPressed(KEY_TWO)) {
-                tempTest *= 10;
-                tempTest += 2;
-            }
-            else if (IsKeyPressed(KEY_THREE)) {
-                tempTest *= 10;
-                tempTest += 3;
-            }
-            else if (IsKeyPressed(KEY_FOUR)) {
-                tempTest *= 10;
-                tempTest += 4;
-            }
-            else if (IsKeyPressed(KEY_FIVE)) {
-                tempTest *= 10;
-                tempTest += 5;
-            }
-            else if (IsKeyPressed(KEY_SIX)) {
-                tempTest *= 10;
-                tempTest += 6;
-            }
-            else if (IsKeyPressed(KEY_SEVEN)) {
-                tempTest *= 10;
-                tempTest += 7;
-            }
-            else if (IsKeyPressed(KEY_EIGHT)) {
-                tempTest *= 10;
-                tempTest += 8;
-            }
-            else if (IsKeyPressed(KEY_NINE)) {
-                tempTest *= 10;
-                tempTest += 9;
-            }
-            else if (IsKeyPressed(KEY_ZERO))
-                tempTest *= 10;
-            if (tempTest > max)
-                number = max;
-            else
-                number = (unsigned char) tempTest;
-        }
-    }
 }
 */

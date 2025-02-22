@@ -12,6 +12,7 @@ public:
     void setUpDisplay(short int getWidth, short int getHeight, char getFramerate);
     void setUpMenu(short int getWidth, short int getHeight);
     void drawScreen();
+    Menu* getMenu();
 };
 
 /*
@@ -46,6 +47,4 @@ void fillDrawGrid(s_drawHelper readDrawGrid[GRIDHEIGHT * GRIDWIDTH]);
 void clickMenu(s_paintInfo& readPaint, int x, int y, s_menuInfo& readMenu);
 void clickScene(s_gridInfo& readGrid, s_paintInfo readPaint, int x, int y, int& prevX, int& prevY, s_menuInfo& readMenu, s_drawHelper readDrawGrid[GRIDHEIGHT * GRIDWIDTH]);
 void paintScene(s_gridInfo& readGrid, s_paintInfo readPaint, int x, int y, int& prevX, int& prevY, s_drawHelper readDrawGrid[GRIDHEIGHT * GRIDWIDTH]);
-void checkKeyboard(s_paintInfo& readPaint, s_menuInfo readMenu);
-void handleNumbers(int min, int max, unsigned char& number);
 */
