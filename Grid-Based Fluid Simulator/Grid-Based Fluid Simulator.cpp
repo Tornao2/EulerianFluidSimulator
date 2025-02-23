@@ -18,11 +18,11 @@ int main(void)
     while (!WindowShouldClose())
     {
         x = GetMouseX();
-        if (x >= SCREENWIDTH) x = SCREENWIDTH - 1;
-        if (x < 0) x = 0;
         y = GetMouseY();
+        if (x >= SCREENWIDTH) x = SCREENWIDTH - 1;
+        else if (x < 0) x = 0;
         if (y >= SCREENHEIGHT) x = SCREENHEIGHT - 1;
-        if (y < 0) y = 0;
+        else if (y < 0) y = 0;
         /*
         if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && x < SCREENWIDTH - MENUWIDTH) {
             //if (drawGrid == NULL) {
@@ -36,11 +36,11 @@ int main(void)
             //drawGrid = NULL;
             //prevX = prevY = -1;
         }
-        //if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && x > SCREENWIDTH - MENUWIDTH)
-            //clickMenu(paintInfo, x, y, menuInfo);
-            */
+        */
         if (engine.getMenu()->getTextField() != 0)
             engine.getMenu()->checkKeyboard();
+        if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && x > SCREENWIDTH - MENUWIDTH)
+            engine.getMenu()->clickMenu(x, y);        
         if (engine.getMenu()->getResetGrid()) {
             //fillGrid(gridInfo);
             engine.getMenu()->setResetGrid(false);

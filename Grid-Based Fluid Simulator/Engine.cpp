@@ -76,66 +76,6 @@ void fillDrawGrid(s_drawHelper readDrawGrid[GRIDHEIGHT * GRIDWIDTH]) {
         }
 }
 
-void clickMenu(s_paintInfo& readPaint, int x, int y, s_menuInfo& readMenu) {
-    readMenu.textField = 0;
-    if (y > 45 && y < 125) {
-        if (x < 1285)
-            readPaint.selectedColor = 1;
-        else if (x < 1350)
-            readPaint.selectedColor = 2;
-        else if (x < 1425)
-            readPaint.selectedColor = 3;
-        else
-            readPaint.selectedColor = 4;
-    }
-    else if (y >= 125 && y < 205) {
-        if (x < 1285)
-            readPaint.selectedColor = 5;
-        else if (x < 1350)
-            readPaint.selectedColor = 6;
-        else if (x < 1425)
-            readPaint.selectedColor = 7;
-        else
-            readPaint.selectedColor = 8;
-    }
-    else if (y >= 205 && y < 240)
-        readPaint.selectedColor = 0;
-    else if (y > 248 && y < 290) {
-        if (x < 1295 && x > 1220)
-            readMenu.textField = 1;
-        else if (x < 1390 && x > 1312)
-            readMenu.textField = 2;
-        else if (x < 1484 && x > 1407)
-            readMenu.textField = 3;
-    }
-    else if (y > 350 && y < 378)
-        readMenu.resetGrid = true;
-    else if (y < 418 && y > 384 && x > SCREENWIDTH - (MENUWIDTH / 4) && x < SCREENWIDTH - (MENUWIDTH * 1 / 8))
-        readMenu.textField = 4;
-    else if (y < 458 && y > 424 && x > SCREENWIDTH - (MENUWIDTH / 4) && x < SCREENWIDTH - (MENUWIDTH * 1 / 8)) 
-        readMenu.displayVelocities = !readMenu.displayVelocities;
-    else if (y > 508 && y < 535) {
-        if (x > 1218 && x < 1285)
-            readPaint.type = gens;
-        else if (x > 1295 && x < 1408)
-            readPaint.type = vel;
-        else if (x > 1415 && x < 1488)
-            readPaint.type = color;
-        readPaint.specialType = 0;
-    }
-    else if (y > 538 && y < 565) {
-        readPaint.type = colorAndVelocity;
-        readPaint.specialType = 0;
-    }
-    else if (y > 570 && y < 610 && readPaint.type == gens) {
-        for (int i = 0; i < 4; i++)
-            if (x > 1230 + i * 70 && x < 1270 + i * 70) {
-                readPaint.specialType = i + 1;
-                break;
-            }
-    }
-}
-
 void clickScene(s_gridInfo& readGrid, s_paintInfo readPaint, int x, int y, int& prevX, int& prevY, s_menuInfo& readMenu, s_drawHelper readDrawGrid[GRIDHEIGHT * GRIDWIDTH]) {
     readMenu.textField = 0;
     if(readPaint.brushSize != 0) paintScene(readGrid, readPaint, x, y, prevX, prevY, readDrawGrid);
