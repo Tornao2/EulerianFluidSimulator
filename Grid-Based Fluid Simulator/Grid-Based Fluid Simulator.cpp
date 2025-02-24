@@ -5,12 +5,14 @@ constexpr int MENUHEIGHT = 900;
 constexpr int SCREENWIDTH = 1500;
 constexpr int SCREENHEIGHT = 900;
 constexpr int FRAMERATE = 60;
+constexpr int GRIDCELLSIZE = 60;
 
 int main(void)
 {
     Engine engine;
     engine.setUpDisplay(SCREENWIDTH, SCREENHEIGHT, FRAMERATE);
     engine.setUpMenu(MENUWIDTH, MENUHEIGHT);
+    engine.setUpGrid(GRIDCELLSIZE);
     //s_gridInfo gridInfo;
     //s_drawHelper* drawGrid = NULL;
     //fillGrid(gridInfo);

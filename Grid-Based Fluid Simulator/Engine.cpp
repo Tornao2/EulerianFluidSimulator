@@ -1,10 +1,5 @@
 #include "Engine.h"
 
-Engine::Engine() {
-    display = nullptr;
-    menu = nullptr;
-}
-
 void Engine::setUpDisplay(short int getWidth, short int getHeight, char getFramerate) {
     display = new Display(getWidth, getHeight, getFramerate);
     display->initScreen();
@@ -12,6 +7,10 @@ void Engine::setUpDisplay(short int getWidth, short int getHeight, char getFrame
 
 void Engine::setUpMenu(short int getWidth, short int getHeight) {
     menu = new Menu(display->getWidth() - getWidth, display->getHeight() - getHeight, getWidth, getHeight);
+}
+
+void Engine::setUpGrid(short int size) {
+    grid = new Grid(size, display->getWidth() - menu->getWidth(), display->getHeight() - menu->getHeight());
 }
 
 Menu* Engine::getMenu() {

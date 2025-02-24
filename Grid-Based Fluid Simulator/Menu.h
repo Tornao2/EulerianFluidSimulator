@@ -20,4 +20,6 @@ public:
 	void checkKeyboard();
 	unsigned char getTextField();
 	void clickMenu(int readX, int readY);
+	short int getWidth();
+	short int getHeight();
 };

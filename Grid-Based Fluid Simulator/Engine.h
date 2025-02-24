@@ -1,32 +1,27 @@
 #pragma once
 #include "Display.h"
 #include "Menu.h"
+#include "Grid.h"
 #include <cmath>
 #include <iostream>
 
 class Engine {
     Display* display;
     Menu* menu;
+    Grid* grid;
 public:
-    Engine();
     void setUpDisplay(short int getWidth, short int getHeight, char getFramerate);
     void setUpMenu(short int getWidth, short int getHeight);
+    void setUpGrid(short int size);
     void drawScreen();
     Menu* getMenu();
 };
 
 /*
-constexpr int GRIDCELLSIZE = 60;
-constexpr int GRIDWIDTH = (SCREENWIDTH - MENUWIDTH) / GRIDCELLSIZE;
-constexpr int GRIDHEIGHT = SCREENHEIGHT / GRIDCELLSIZE;
-constexpr Color BACKGROUNDCOLOR = { 7, 7, 9, 255 };
-
 typedef struct s_gridCell {
     Color cellColor;
     unsigned short int density;
 }s_gridCell;
-
-
 
 typedef struct s_gridInfo {
     s_gridCell cellInfo[GRIDWIDTH * GRIDHEIGHT];

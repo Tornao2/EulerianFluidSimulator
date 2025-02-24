@@ -155,3 +155,12 @@ void Menu::clickMenu(int readX, int readY) {
     else if (readY >= height * 38 / 64 && readY <= height * 38 / 64 + FONTSIZE)
         *brushType = colorAndVelocity;
 }
+
+short int Menu::getWidth() {
+    return width;
+}
+
+short int Menu::getHeight() {
+    return height;
+}
+
