@@ -1,5 +1,11 @@
 #include "Engine.h"
 
+Engine::~Engine() {
+    delete display;
+    delete menu;
+    delete grid;
+}
+
 void Engine::setUpDisplay(short int getWidth, short int getHeight, char getFramerate) {
     display = new Display(getWidth, getHeight, getFramerate);
     display->initScreen();
@@ -10,17 +16,21 @@ void Engine::setUpMenu(short int getWidth, short int getHeight) {
 }
 
 void Engine::setUpGrid(short int size) {
-    grid = new Grid(size, display->getWidth() - menu->getWidth(), display->getHeight() - menu->getHeight());
+    grid = new Grid(size, display->getWidth() - menu->getWidth(), display->getHeight(), menu->getBrush());
 }
 
 Menu* Engine::getMenu() {
     return menu;
 }
 
+Grid* Engine::getGrid() {
+    return grid;
+}
+
 void Engine::drawScreen() {
     BeginDrawing();
-    ClearBackground(MENUCOLOR);
-    //drawScene(readGrid, readMenu);
+    ClearBackground(BLACK);
+    grid->drawCells();
     menu->drawMenu();
     EndDrawing();
 }
@@ -37,10 +47,6 @@ void drawVerVelocity(char velocity, int x, int y) {
 }
 
 void drawScene(s_gridInfo& readGrid, s_menuInfo readMenu) {
-    DrawRectangle(0, 0, SCREENWIDTH - MENUWIDTH, SCREENHEIGHT, BACKGROUNDCOLOR);
-    for (unsigned short int row = 0; row < GRIDHEIGHT; row++)
-        for (unsigned short int col = 0; col < GRIDWIDTH; col++) 
-            DrawRectangle(GRIDCELLSIZE * col, GRIDCELLSIZE * row, GRIDCELLSIZE, GRIDCELLSIZE, { readGrid.cellInfo[row * GRIDWIDTH + col].cellColor.r, readGrid.cellInfo[row * GRIDWIDTH + col].cellColor.g, readGrid.cellInfo[row * GRIDWIDTH + col].cellColor.b, readGrid.cellInfo[row * GRIDWIDTH + col].density > 255 ? (unsigned char) 255 : (unsigned char) readGrid.cellInfo[row * GRIDWIDTH + col].density });               
     if (readMenu.displayVelocities) {
         for (unsigned short int row = 0; row < GRIDHEIGHT; row++)
             for (unsigned short int col = 0; col < GRIDWIDTH; col++) {
@@ -53,11 +59,6 @@ void drawScene(s_gridInfo& readGrid, s_menuInfo readMenu) {
 }   
 
 void fillGrid(s_gridInfo& readGrid) {
-    for (int row = 0; row < GRIDHEIGHT; row++)
-        for (int col = 0; col < GRIDWIDTH; col++) {
-            readGrid.cellInfo[row * GRIDWIDTH + col].cellColor = BACKGROUNDCOLOR;
-            readGrid.cellInfo[row * GRIDWIDTH + col].density = 0;
-        }
     for (int i = 0; i < GRIDHEIGHT-1; i++)
         for (int j = 0; j < GRIDWIDTH; j++)
             readGrid.verticalMov[j + i * GRIDWIDTH] = 0;
@@ -67,21 +68,12 @@ void fillGrid(s_gridInfo& readGrid) {
       
 }
 
-void fillDrawGrid(s_drawHelper readDrawGrid[GRIDHEIGHT * GRIDWIDTH]) {
-    for (int row = 0; row < GRIDHEIGHT; row++)
-        for (int col = 0; col < GRIDWIDTH; col++) {
-            readDrawGrid[row * GRIDWIDTH + col].initX = readDrawGrid[row * GRIDWIDTH + col].initY = -1;
-            readDrawGrid[row * GRIDWIDTH + col].status = 0;
-        }
-}
-
 void clickScene(s_gridInfo& readGrid, s_paintInfo readPaint, int x, int y, int& prevX, int& prevY, s_menuInfo& readMenu, s_drawHelper readDrawGrid[GRIDHEIGHT * GRIDWIDTH]) {
     readMenu.textField = 0;
     if(readPaint.brushSize != 0) paintScene(readGrid, readPaint, x, y, prevX, prevY, readDrawGrid);
 }
 
 void paintScene(s_gridInfo& readGrid, s_paintInfo readPaint, int x, int y, int& prevX, int& prevY, s_drawHelper readDrawGrid[GRIDHEIGHT * GRIDWIDTH]) {
-    unsigned char alphaDelta = 255 / ((readPaint.brushSize + 1) / 2 + 1);
     if (readDrawGrid[y / GRIDCELLSIZE * GRIDWIDTH + x/ GRIDCELLSIZE].status == 0) {
         if (prevX != -1)
             readDrawGrid[prevY * GRIDWIDTH + prevX].status = 3;

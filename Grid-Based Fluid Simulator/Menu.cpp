@@ -1,5 +1,4 @@
 #include "Menu.h"
-#include <xstring>
 
 Menu::Menu(short int getX, short int getY, short int getWidth, short int getHeight) {
 	x = getX;
@@ -14,10 +13,24 @@ Menu::Menu(short int getX, short int getY, short int getWidth, short int getHeig
 		colorArray[i] = WHITE;
 	selectedColor = 1;
 	brushSize = 1;
-	brushType = new e_brushType;
+	brushType = new BrushType;
+}
+
+unsigned char Menu::getBrushSize() {
+    return brushSize;
+}
+
+Menu::~Menu() {
+    delete brushType;
+    brushType = nullptr;
+}
+
+BrushType* Menu::getBrush() {
+    return brushType;
 }
 
 void Menu::drawMenu() {
+    DrawRectangle(x, y, width, height, MENUCOLOR);
     for (int i = 0; i < 2; i++)
         for (int j = 0; j < 4; j++) {
             DrawRectangle(x + (j * width / 4) + (width / 16), y + i * height/12 + height / 20, width / 8, width / 8, BLACK);

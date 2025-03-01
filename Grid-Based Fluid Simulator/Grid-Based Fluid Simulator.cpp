@@ -13,9 +13,6 @@ int main(void)
     engine.setUpDisplay(SCREENWIDTH, SCREENHEIGHT, FRAMERATE);
     engine.setUpMenu(MENUWIDTH, MENUHEIGHT);
     engine.setUpGrid(GRIDCELLSIZE);
-    //s_gridInfo gridInfo;
-    //s_drawHelper* drawGrid = NULL;
-    //fillGrid(gridInfo);
     int x = 0, y = 0, prevX = -1, prevY = -1;
     while (!WindowShouldClose())
     {
@@ -44,7 +41,7 @@ int main(void)
         if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && x > SCREENWIDTH - MENUWIDTH)
             engine.getMenu()->clickMenu(x, y);        
         if (engine.getMenu()->getResetGrid()) {
-            //fillGrid(gridInfo);
+            engine.getGrid()->fillGridInfo();
             engine.getMenu()->setResetGrid(false);
         }
         engine.drawScreen();

@@ -1,10 +1,10 @@
 #pragma once
 #include "raylib.h"
 
-typedef enum e_brushType {
+typedef enum BrushType {
 	color,
 	vel,
 	colorAndVelocity
-}e_brushType;
+}BrushType;
 
 bool operator==(Color x, Color y);

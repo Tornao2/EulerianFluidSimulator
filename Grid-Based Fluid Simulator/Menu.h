@@ -10,10 +10,11 @@ class Menu {
 	unsigned char textField, selectedColor, brushSize;
 	bool resetGrid, displayVelocities;
 	Color colorArray[9];
-	e_brushType* brushType;
+	BrushType* brushType;
 	void handleNumbers(int min, int max, unsigned char& number);
 public:
 	Menu(short int getX, short int getY, short int getWidth, short int getHeight);
+	~Menu();
 	void drawMenu();
 	bool getResetGrid();
 	void setResetGrid(bool setReset);
@@ -22,4 +23,6 @@ public:
 	void clickMenu(int readX, int readY);
 	short int getWidth();
 	short int getHeight();
+	unsigned char getBrushSize();
+	BrushType* getBrush();
 };
