@@ -6,9 +6,8 @@ typedef struct GridData {
 }GridData;
 
 class Drawer {
-	BrushType* brushType;
+	short int* pointerGridSize, * pointerGridWidth, * pointerGridHeight;
 public:
-	Drawer(BrushType* brush);
-	~Drawer();
-	void paint(GridData* gridData, Menu menu);
+	Drawer(short int* gridSize, short int* gridWidth, short int* gridHeight);
+	void paint(GridData* gridData, Menu menu, int x, int y);
 };

@@ -16,7 +16,7 @@ void Engine::setUpMenu(short int getWidth, short int getHeight) {
 }
 
 void Engine::setUpGrid(short int size) {
-    grid = new Grid(size, display->getWidth() - menu->getWidth(), display->getHeight(), menu->getBrush());
+    grid = new Grid(size, display->getWidth() - menu->getWidth(), display->getHeight());
 }
 
 Menu* Engine::getMenu() {
@@ -68,11 +68,6 @@ void fillGrid(s_gridInfo& readGrid) {
       
 }
 
-void clickScene(s_gridInfo& readGrid, s_paintInfo readPaint, int x, int y, int& prevX, int& prevY, s_menuInfo& readMenu, s_drawHelper readDrawGrid[GRIDHEIGHT * GRIDWIDTH]) {
-    readMenu.textField = 0;
-    if(readPaint.brushSize != 0) paintScene(readGrid, readPaint, x, y, prevX, prevY, readDrawGrid);
-}
-
 void paintScene(s_gridInfo& readGrid, s_paintInfo readPaint, int x, int y, int& prevX, int& prevY, s_drawHelper readDrawGrid[GRIDHEIGHT * GRIDWIDTH]) {
     if (readDrawGrid[y / GRIDCELLSIZE * GRIDWIDTH + x/ GRIDCELLSIZE].status == 0) {
         if (prevX != -1)
@@ -88,7 +83,6 @@ void paintScene(s_gridInfo& readGrid, s_paintInfo readPaint, int x, int y, int& 
                 {
                     readGrid.cellInfo[(y / GRIDCELLSIZE + i) * GRIDWIDTH + x / GRIDCELLSIZE + j].cellColor = readPaint.colorArray[readPaint.selectedColor];
                     readGrid.cellInfo[(y / GRIDCELLSIZE + i) * GRIDWIDTH + x / GRIDCELLSIZE + j].density = 255 - (abs(i) + abs(j)) * alphaDelta;
-                    readDrawGrid[y / GRIDCELLSIZE * GRIDWIDTH + x / GRIDCELLSIZE].status = 2;   
                 }
             }
         }

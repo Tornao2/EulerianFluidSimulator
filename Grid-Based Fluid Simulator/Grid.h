@@ -7,9 +7,9 @@ class Grid {
 	GridData* gridData;
 	Drawer* drawer;
 public:
-	Grid(short int size, short int sceneWidth, short int sceneHeight, BrushType* brush);
+	Grid(short int size, short int sceneWidth, short int sceneHeight);
 	void fillGridInfo();
 	void drawCells();
-	void paintCells(Menu menu);
+	void clickScene(Menu* menu, int x, int y);
 	~Grid();
 };

@@ -29,6 +29,5 @@ void drawHorVelocity(char velocity, int x, int y);
 void drawVerVelocity(char velocity, int x, int y);
 void drawScene(s_gridInfo& readGrid, s_menuInfo readMenu);
 void fillGrid(s_gridInfo& readGrid);
-void clickScene(s_gridInfo& readGrid, s_paintInfo readPaint, int x, int y, int& prevX, int& prevY, s_menuInfo& readMenu, s_drawHelper readDrawGrid[GRIDHEIGHT * GRIDWIDTH]);
 void paintScene(s_gridInfo& readGrid, s_paintInfo readPaint, int x, int y, int& prevX, int& prevY, s_drawHelper readDrawGrid[GRIDHEIGHT * GRIDWIDTH]);
 */

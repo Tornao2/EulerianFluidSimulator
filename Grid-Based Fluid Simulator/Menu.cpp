@@ -1,4 +1,5 @@
 #include "Menu.h"
+#include <xstring>
 
 Menu::Menu(short int getX, short int getY, short int getWidth, short int getHeight) {
 	x = getX;
@@ -13,19 +14,14 @@ Menu::Menu(short int getX, short int getY, short int getWidth, short int getHeig
 		colorArray[i] = WHITE;
 	selectedColor = 1;
 	brushSize = 1;
-	brushType = new BrushType;
+	brushType = color;
 }
 
 unsigned char Menu::getBrushSize() {
     return brushSize;
 }
 
-Menu::~Menu() {
-    delete brushType;
-    brushType = nullptr;
-}
-
-BrushType* Menu::getBrush() {
+BrushType Menu::getBrush() {
     return brushType;
 }
 
@@ -56,9 +52,9 @@ void Menu::drawMenu() {
     DrawText("Toggle velocity:", x + width / 80, height * 29 / 64, FONTSIZE*18/20, BLACK);
     DrawRectangle(x + width * 7/ 8, height * 29 / 64, width / 10, width / 10, displayVelocities ? GREEN : RED);
     DrawText("Brush mode:", x + width / 2 - (MeasureText("Brush mode", FONTSIZE)) / 2, height / 2, FONTSIZE, BLACK);
-    DrawText("Fluid", x + width * 5 / 24 - (MeasureText("Fluid", FONTSIZE)) / 2, height * 35 / 64, FONTSIZE, *brushType == vel ? DARKGREEN : BLACK);
-    DrawText("Velocity", x + width * 2 / 3 - (MeasureText("Velocity", FONTSIZE)) / 2, height * 35 / 64, FONTSIZE, *brushType == color ? DARKGREEN : BLACK);
-    DrawText("Fluid + Velocity", x + width / 2 - (MeasureText("Fluid + Velocity", FONTSIZE)) / 2, height * 38 / 64, FONTSIZE, *brushType == colorAndVelocity ? DARKGREEN : BLACK);
+    DrawText("Fluid", x + width * 5 / 24 - (MeasureText("Fluid", FONTSIZE)) / 2, height * 35 / 64, FONTSIZE, brushType == vel ? DARKGREEN : BLACK);
+    DrawText("Velocity", x + width * 2 / 3 - (MeasureText("Velocity", FONTSIZE)) / 2, height * 35 / 64, FONTSIZE, brushType == color ? DARKGREEN : BLACK);
+    DrawText("Fluid + Velocity", x + width / 2 - (MeasureText("Fluid + Velocity", FONTSIZE)) / 2, height * 38 / 64, FONTSIZE, brushType == colorAndVelocity ? DARKGREEN : BLACK);
 }
 
 void Menu::handleNumbers(int min, int max, unsigned char& number) {
@@ -161,12 +157,12 @@ void Menu::clickMenu(int readX, int readY) {
         displayVelocities = !displayVelocities;
     else if (readY >= height * 35 / 64 && readY < height * 35 / 64 + FONTSIZE) {
         if (readX >= x + width * 5 / 24 - (MeasureText("Fluid", FONTSIZE)) / 2 && readX <= x + width * 5 / 24 + (MeasureText("Fluid", FONTSIZE)) / 2)
-            *brushType = vel;
+            brushType = vel;
         else if (readX >= x + width * 2 / 3 - (MeasureText("Velocity", FONTSIZE)) / 2 && readX <= x + width * 2 / 3 + (MeasureText("Velocity", FONTSIZE)) / 2)
-            *brushType = color;
+            brushType = color;
     }
     else if (readY >= height * 38 / 64 && readY <= height * 38 / 64 + FONTSIZE)
-        *brushType = colorAndVelocity;
+        brushType = colorAndVelocity;
 }
 
 short int Menu::getWidth() {
@@ -175,5 +171,9 @@ short int Menu::getWidth() {
 
 short int Menu::getHeight() {
     return height;
+}
+
+void Menu::setTextField(unsigned char fieldNum) {
+    textField = fieldNum;
 }
 

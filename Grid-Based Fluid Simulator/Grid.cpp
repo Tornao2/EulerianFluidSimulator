@@ -1,11 +1,11 @@
 #include "Grid.h"
 
-Grid::Grid(short int size, short int sceneWidth, short int sceneHeight, BrushType* brush) {
+Grid::Grid(short int size, short int sceneWidth, short int sceneHeight) {
 	gridSize = size;
 	gridWidth = sceneWidth / size;
 	gridHeight = sceneHeight / size;
 	gridData = new GridData[gridHeight* gridWidth];
-	drawer = new Drawer(brush);
+	drawer = new Drawer(&gridSize, &gridWidth, &gridHeight);
 	fillGridInfo();
 }
 
@@ -24,6 +24,7 @@ void Grid::drawCells() {
 			DrawRectangle(gridSize * col, gridSize * row, gridSize, gridSize, {255, 255, 255, gridData[row*gridWidth+col].materialCount});
 }
 
-void Grid::paintCells(Menu menu) {
-	drawer->paint(gridData, menu);
+void Grid::clickScene(Menu* menu, int x, int y) {
+	menu->setTextField(0);
+	drawer->paint(gridData, *menu, x, y);
 }

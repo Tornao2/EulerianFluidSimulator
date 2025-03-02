@@ -13,37 +13,28 @@ int main(void)
     engine.setUpDisplay(SCREENWIDTH, SCREENHEIGHT, FRAMERATE);
     engine.setUpMenu(MENUWIDTH, MENUHEIGHT);
     engine.setUpGrid(GRIDCELLSIZE);
-    int x = 0, y = 0, prevX = -1, prevY = -1;
+    int x = 0, y = 0;
     while (!WindowShouldClose())
-    {
-        x = GetMouseX();
-        y = GetMouseY();
-        if (x >= SCREENWIDTH) x = SCREENWIDTH - 1;
-        else if (x < 0) x = 0;
-        if (y >= SCREENHEIGHT) x = SCREENHEIGHT - 1;
-        else if (y < 0) y = 0;
-        /*
-        if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && x < SCREENWIDTH - MENUWIDTH) {
-            //if (drawGrid == NULL) {
-            //    drawGrid = new s_drawHelper[GRIDHEIGHT * GRIDWIDTH];
-            //    fillDrawGrid(drawGrid);
-            //}
-            //clickScene(gridInfo, paintInfo, x, y, prevX, prevY, menuInfo, drawGrid);
-        }
-        if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT) && drawGrid != NULL) {
-            //delete[] drawGrid;
-            //drawGrid = NULL;
-            //prevX = prevY = -1;
-        }
-        */
+    { 
+        if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+            x = GetMouseX();
+            y = GetMouseY();
+            if (x >= SCREENWIDTH) x = SCREENWIDTH - 1;
+            else if (x < 0) x = 0;
+            if (y >= SCREENHEIGHT) x = SCREENHEIGHT - 1;
+            else if (y < 0) y = 0;
+            if (x < SCREENWIDTH - MENUWIDTH) 
+                engine.getGrid()->clickScene(engine.getMenu(), x, y);
+            else if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
+                engine.getMenu()->clickMenu(x, y);
+                if (engine.getMenu()->getResetGrid()) {
+                    engine.getGrid()->fillGridInfo();
+                    engine.getMenu()->setResetGrid(false);
+                }
+            }
+        }    
         if (engine.getMenu()->getTextField() != 0)
-            engine.getMenu()->checkKeyboard();
-        if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && x > SCREENWIDTH - MENUWIDTH)
-            engine.getMenu()->clickMenu(x, y);        
-        if (engine.getMenu()->getResetGrid()) {
-            engine.getGrid()->fillGridInfo();
-            engine.getMenu()->setResetGrid(false);
-        }
+            engine.getMenu()->checkKeyboard();   
         engine.drawScreen();
     }
     CloseWindow();        
