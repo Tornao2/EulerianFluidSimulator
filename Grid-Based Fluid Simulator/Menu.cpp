@@ -1,5 +1,4 @@
 #include "Menu.h"
-#include <xstring>
 
 Menu::Menu(short int getX, short int getY, short int getWidth, short int getHeight) {
 	x = getX;
@@ -157,9 +156,9 @@ void Menu::clickMenu(int readX, int readY) {
         displayVelocities = !displayVelocities;
     else if (readY >= height * 35 / 64 && readY < height * 35 / 64 + FONTSIZE) {
         if (readX >= x + width * 5 / 24 - (MeasureText("Fluid", FONTSIZE)) / 2 && readX <= x + width * 5 / 24 + (MeasureText("Fluid", FONTSIZE)) / 2)
-            brushType = vel;
-        else if (readX >= x + width * 2 / 3 - (MeasureText("Velocity", FONTSIZE)) / 2 && readX <= x + width * 2 / 3 + (MeasureText("Velocity", FONTSIZE)) / 2)
             brushType = color;
+        else if (readX >= x + width * 2 / 3 - (MeasureText("Velocity", FONTSIZE)) / 2 && readX <= x + width * 2 / 3 + (MeasureText("Velocity", FONTSIZE)) / 2)
+            brushType = vel;
     }
     else if (readY >= height * 38 / 64 && readY <= height * 38 / 64 + FONTSIZE)
         brushType = colorAndVelocity;
