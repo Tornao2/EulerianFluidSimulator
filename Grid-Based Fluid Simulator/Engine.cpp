@@ -76,15 +76,6 @@ void paintScene(s_gridInfo& readGrid, s_paintInfo readPaint, int x, int y, int& 
         readDrawGrid[y / GRIDCELLSIZE * GRIDWIDTH + x / GRIDCELLSIZE].initX = x;
         readDrawGrid[y / GRIDCELLSIZE * GRIDWIDTH + x / GRIDCELLSIZE].initY = y;
     }
-    if (readDrawGrid[y / GRIDCELLSIZE * GRIDWIDTH + x / GRIDCELLSIZE].status == 1 && (readPaint.type == color || readPaint.type == colorAndVelocity))
-        
-                if (y / GRIDCELLSIZE + i >= 0 && y / GRIDCELLSIZE + i < GRIDHEIGHT && x / GRIDCELLSIZE + j >= 0 && x / GRIDCELLSIZE + j < GRIDWIDTH)
-                {
-                    readGrid.cellInfo[(y / GRIDCELLSIZE + i) * GRIDWIDTH + x / GRIDCELLSIZE + j].cellColor = readPaint.colorArray[readPaint.selectedColor];
-                    readGrid.cellInfo[(y / GRIDCELLSIZE + i) * GRIDWIDTH + x / GRIDCELLSIZE + j].density = 255 - (abs(i) + abs(j)) * alphaDelta;
-                }
-            }
-        }
     if ((readPaint.type == vel || readPaint.type == colorAndVelocity)&&readDrawGrid[prevY*GRIDWIDTH + prevX].status == 3)
     {     
         for (int i = -readPaint.brushSize / 2; i <= (readPaint.brushSize - 1) / 2; i++) {

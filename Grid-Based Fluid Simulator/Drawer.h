@@ -1,5 +1,6 @@
 #pragma once
 #include "Menu.h"
+#include <memory>
 
 typedef struct GridData {
 	unsigned char materialCount;

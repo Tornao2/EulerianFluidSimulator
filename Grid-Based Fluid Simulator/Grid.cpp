@@ -28,3 +28,7 @@ void Grid::clickScene(Menu* menu, int x, int y) {
 	menu->setTextField(0);
 	drawer->paint(gridData, *menu, x, y);
 }
+
+Drawer* Grid::getDrawer() {
+	return drawer;
+}

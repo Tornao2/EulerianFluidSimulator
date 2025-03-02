@@ -1,6 +1,5 @@
 #pragma once
 #include "Drawer.h"
-#include <memory>
 
 class Grid {
 	short int gridSize, gridWidth, gridHeight;
@@ -11,5 +10,6 @@ public:
 	void fillGridInfo();
 	void drawCells();
 	void clickScene(Menu* menu, int x, int y);
+	Drawer* getDrawer();
 	~Grid();
 };

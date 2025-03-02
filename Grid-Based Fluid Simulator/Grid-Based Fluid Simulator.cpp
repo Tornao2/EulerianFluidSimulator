@@ -23,8 +23,7 @@ int main(void)
             else if (x < 0) x = 0;
             if (y >= SCREENHEIGHT) x = SCREENHEIGHT - 1;
             else if (y < 0) y = 0;
-            if (x < SCREENWIDTH - MENUWIDTH) 
-                engine.getGrid()->clickScene(engine.getMenu(), x, y);
+            if (x < SCREENWIDTH - MENUWIDTH) engine.getGrid()->clickScene(engine.getMenu(), x, y);
             else if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
                 engine.getMenu()->clickMenu(x, y);
                 if (engine.getMenu()->getResetGrid()) {
@@ -32,9 +31,8 @@ int main(void)
                     engine.getMenu()->setResetGrid(false);
                 }
             }
-        }    
-        if (engine.getMenu()->getTextField() != 0)
-            engine.getMenu()->checkKeyboard();   
+        }
+        if (engine.getMenu()->getTextField() != 0) engine.getMenu()->checkKeyboard();   
         engine.drawScreen();
     }
     CloseWindow();        

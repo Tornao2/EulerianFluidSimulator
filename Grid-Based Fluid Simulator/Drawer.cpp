@@ -1,5 +1,4 @@
 #include "Drawer.h"
-#include <xstring>
 
 Drawer::Drawer(short int* gridSize, short int* gridWidth, short int* gridHeight) {
 	pointerGridHeight = gridHeight;
@@ -15,8 +14,9 @@ void Drawer::paint(GridData* gridData, Menu menu, int x, int y) {
 			int cellWidth = x / (*pointerGridSize);
 			for (int i = -(menu.getBrushSize()-1); i < menu.getBrushSize(); i++) {
 				for (int j = -(menu.getBrushSize()-1); j < menu.getBrushSize(); j++) {
-					if (cellHeight + i < *pointerGridHeight && cellHeight + i > 0 && cellWidth + j < *pointerGridWidth && cellWidth + j > 0 && abs(i) + abs(j) < menu.getBrushSize()) {
-						gridData[(cellHeight+i) * (*pointerGridWidth) + cellWidth +j].materialCount = 255;
+					if (cellHeight + i < *pointerGridHeight && cellHeight + i >= 0 && cellWidth + j < *pointerGridWidth && cellWidth + j >= 0 && 
+						abs(i) + abs(j) < menu.getBrushSize() && gridData[(cellHeight + i) * (*pointerGridWidth) + cellWidth + j].materialCount < 255 - alphaDelta * (abs(i) + abs(j))) {
+						gridData[(cellHeight+i) * (*pointerGridWidth) + cellWidth +j].materialCount = 255 - alphaDelta * (abs(i) + abs(j));
 					}
 				}
 			}
