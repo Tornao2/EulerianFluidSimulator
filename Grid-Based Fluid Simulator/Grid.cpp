@@ -15,13 +15,13 @@ Grid::~Grid() {
 }
 
 void Grid::fillGridInfo() {
-	memset(gridData, 0, sizeof(unsigned char) * gridHeight * gridWidth);
+	memset(gridData, 0, sizeof(*gridData)* gridHeight * gridWidth);
 }
 
 void Grid::drawCells() {
 	for (int row = 0; row < gridHeight; row++)
 		for (int col = 0; col < gridWidth; col++) 
-			DrawRectangle(gridSize * col, gridSize * row, gridSize, gridSize, {255, 255, 255, gridData[row*gridWidth+col].materialCount});
+			DrawRectangle(gridSize * col, gridSize * row, gridSize, gridSize, gridData[row * gridWidth + col].cellColor);
 }
 
 void Grid::clickScene(Menu* menu, int x, int y) {

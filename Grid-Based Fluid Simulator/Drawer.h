@@ -3,7 +3,7 @@
 #include <memory>
 
 typedef struct GridData {
-	unsigned char materialCount;
+	Color cellColor;
 }GridData;
 
 class Drawer {

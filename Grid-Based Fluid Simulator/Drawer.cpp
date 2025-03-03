@@ -15,8 +15,12 @@ void Drawer::paint(GridData* gridData, Menu menu, int x, int y) {
 			for (int i = -(menu.getBrushSize()-1); i < menu.getBrushSize(); i++) {
 				for (int j = -(menu.getBrushSize()-1); j < menu.getBrushSize(); j++) {
 					if (cellHeight + i < *pointerGridHeight && cellHeight + i >= 0 && cellWidth + j < *pointerGridWidth && cellWidth + j >= 0 && abs(i) + abs(j) < menu.getBrushSize()) {
-						short int check = gridData[(cellHeight + i) * (*pointerGridWidth) + cellWidth + j].materialCount + menu.getGiveMaterial() - alphaDelta * (abs(i) + abs(j));
-						gridData[(cellHeight+i) * (*pointerGridWidth) + cellWidth +j].materialCount = check <= 255 ? check : 255;
+						short int check = gridData[(cellHeight + i) * (*pointerGridWidth) + cellWidth + j].cellColor.a + menu.getGiveMaterial() - alphaDelta * (abs(i) + abs(j));
+						gridData[(cellHeight + i) * (*pointerGridWidth) + cellWidth + j].cellColor = averageColors(gridData[(cellHeight + i) * (*pointerGridWidth) + cellWidth + j].cellColor, calculateAfterFade(menu.getSelectedColor(), menu.getBrushSize(), abs(i) + abs(j)));
+						if (!(menu.getSelectedColor() == BLACK))
+							gridData[(cellHeight + i) * (*pointerGridWidth) + cellWidth + j].cellColor.a = check <= 255 ? check : 255;
+						else 
+							gridData[(cellHeight + i) * (*pointerGridWidth) + cellWidth + j].cellColor.a = 255;
 					}
 				}
 			}

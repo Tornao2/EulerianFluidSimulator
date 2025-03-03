@@ -27,4 +27,5 @@ public:
 	void setTextField(unsigned char fieldNum);
 	unsigned char getGiveMaterial();
 	void setGiveMaterial(unsigned char count);
+	Color getSelectedColor();
 };

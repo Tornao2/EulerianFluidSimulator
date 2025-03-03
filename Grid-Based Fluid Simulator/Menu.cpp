@@ -14,14 +14,19 @@ Menu::Menu(short int getX, short int getY, short int getWidth, short int getHeig
 	selectedColor = 1;
 	brushSize = 1;
 	brushType = color;
-    giveMaterial = 50;
+    giveMaterial = 20;
 }
 
 unsigned char Menu::getGiveMaterial() {
     return giveMaterial;
 }
+
 void Menu::setGiveMaterial(unsigned char count) {
     giveMaterial = count;
+}
+
+Color Menu::getSelectedColor() {
+    return colorArray[selectedColor];
 }
 
 unsigned char Menu::getBrushSize() {
@@ -37,7 +42,7 @@ void Menu::drawMenu() {
     for (int i = 0; i < 2; i++)
         for (int j = 0; j < 4; j++) {
             DrawRectangle(x + (j * width / 4) + (width / 16), y + i * height/12 + height / 20, width / 8, width / 8, BLACK);
-            DrawRectangle(x + (j * width / 4) + (width / 12), y + i * height / 12 + height / 20 + width / 48, width / 12, width / 12, colorArray[i * 2 + j + 1]);
+            DrawRectangle(x + (j * width / 4) + (width / 12), y + i * height / 12 + height / 20 + width / 48, width / 12, width / 12, colorArray[i * 4 + j + 1]);
             DrawText(TextFormat("%i", i * 4 + j + 1), x + (j * width / 4) + (width / 8) - MeasureText(TextFormat("%i", i * 4 + j + 1), FONTSIZE) / 2, y + i * height / 12 + height / 20 + width / 8, FONTSIZE, selectedColor == i * 4 + j + 1 ? DARKGREEN : BLACK);
         }   
     DrawText("Colors", x + width / 2 - MeasureText("Colors", FONTSIZE) / 2, 0, FONTSIZE, BLACK);
@@ -59,8 +64,8 @@ void Menu::drawMenu() {
     DrawText("Toggle velocity:", x + width / 80, height * 29 / 64, FONTSIZE*18/20, BLACK);
     DrawRectangle(x + width * 7/ 8, height * 29 / 64, width / 10, width / 10, displayVelocities ? GREEN : RED);
     DrawText("Brush mode:", x + width / 2 - (MeasureText("Brush mode", FONTSIZE)) / 2, height / 2, FONTSIZE, BLACK);
-    DrawText("Fluid", x + width * 5 / 24 - (MeasureText("Fluid", FONTSIZE)) / 2, height * 35 / 64, FONTSIZE, brushType == vel ? DARKGREEN : BLACK);
-    DrawText("Velocity", x + width * 2 / 3 - (MeasureText("Velocity", FONTSIZE)) / 2, height * 35 / 64, FONTSIZE, brushType == color ? DARKGREEN : BLACK);
+    DrawText("Fluid", x + width * 5 / 24 - (MeasureText("Fluid", FONTSIZE)) / 2, height * 35 / 64, FONTSIZE, brushType == color ? DARKGREEN : BLACK);
+    DrawText("Velocity", x + width * 2 / 3 - (MeasureText("Velocity", FONTSIZE)) / 2, height * 35 / 64, FONTSIZE, brushType == vel ? DARKGREEN : BLACK);
     DrawText("Fluid + Velocity", x + width / 2 - (MeasureText("Fluid + Velocity", FONTSIZE)) / 2, height * 38 / 64, FONTSIZE, brushType == colorAndVelocity ? DARKGREEN : BLACK);
 }
 
