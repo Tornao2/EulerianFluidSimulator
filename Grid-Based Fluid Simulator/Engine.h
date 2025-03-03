@@ -4,6 +4,8 @@
 #include <cmath>
 #include <iostream>
 
+constexpr Color BACKGROUNDCOLOR = { 5, 5, 5, 255 };
+
 class Engine {
     Display* display;
     Menu* menu;

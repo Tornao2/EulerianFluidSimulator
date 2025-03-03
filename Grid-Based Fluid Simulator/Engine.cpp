@@ -29,7 +29,7 @@ Grid* Engine::getGrid() {
 
 void Engine::drawScreen() {
     BeginDrawing();
-    ClearBackground(BLACK);
+    ClearBackground(BACKGROUNDCOLOR);
     grid->drawCells();
     menu->drawMenu();
     EndDrawing();
