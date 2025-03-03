@@ -14,6 +14,14 @@ Menu::Menu(short int getX, short int getY, short int getWidth, short int getHeig
 	selectedColor = 1;
 	brushSize = 1;
 	brushType = color;
+    giveMaterial = 50;
+}
+
+unsigned char Menu::getGiveMaterial() {
+    return giveMaterial;
+}
+void Menu::setGiveMaterial(unsigned char count) {
+    giveMaterial = count;
 }
 
 unsigned char Menu::getBrushSize() {
@@ -46,10 +54,8 @@ void Menu::drawMenu() {
     }
     DrawText("Reset scene", x + width / 2 - MeasureText("Reset scene", FONTSIZE) / 2, height * 23 / 64, FONTSIZE, RED);
     DrawText("Brush size:", x + width / 20, height * 13 / 32, FONTSIZE, BLACK);
-
     DrawRectangle(x + width * 3 / 4, height * 13 / 32, width / 8, width / 8, textField == 4 ? SELECTCOLOR : WHITE);
-    DrawText(TextFormat("%i", brushSize), x + width * 39/48 - MeasureText(TextFormat("%i", brushSize), FONTSIZE) / 2, height * 13 / 32, FONTSIZE, BLACK);
-
+    DrawText(TextFormat("%i", brushSize), x + width * 13/16 - MeasureText(TextFormat("%i", brushSize), FONTSIZE) / 2, height * 13 / 32, FONTSIZE, BLACK);
     DrawText("Toggle velocity:", x + width / 80, height * 29 / 64, FONTSIZE*18/20, BLACK);
     DrawRectangle(x + width * 7/ 8, height * 29 / 64, width / 10, width / 10, displayVelocities ? GREEN : RED);
     DrawText("Brush mode:", x + width / 2 - (MeasureText("Brush mode", FONTSIZE)) / 2, height / 2, FONTSIZE, BLACK);

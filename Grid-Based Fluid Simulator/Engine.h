@@ -19,12 +19,6 @@ public:
 };
 
 /*
-typedef struct s_gridInfo {
-    s_gridCell cellInfo[GRIDWIDTH * GRIDHEIGHT];
-    char horizontalMov[(GRIDWIDTH - 1) * GRIDHEIGHT];
-    char verticalMov[GRIDWIDTH * (GRIDHEIGHT - 1)];
-}s_gridInfo;
-
 void drawHorVelocity(char velocity, int x, int y);
 void drawVerVelocity(char velocity, int x, int y);
 void drawScene(s_gridInfo& readGrid, s_menuInfo readMenu);

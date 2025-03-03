@@ -7,7 +7,7 @@ constexpr Color SELECTCOLOR = { 200, 230, 200, 255 };
 
 class Menu {
 	short int x, y, width, height;
-	unsigned char textField, selectedColor, brushSize;
+	unsigned char textField, selectedColor, brushSize, giveMaterial;
 	bool resetGrid, displayVelocities;
 	Color colorArray[9];
 	BrushType brushType;
@@ -25,4 +25,6 @@ public:
 	unsigned char getBrushSize();
 	BrushType getBrush();
 	void setTextField(unsigned char fieldNum);
+	unsigned char getGiveMaterial();
+	void setGiveMaterial(unsigned char count);
 };
